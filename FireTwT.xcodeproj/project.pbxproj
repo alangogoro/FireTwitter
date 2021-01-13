@@ -9,21 +9,21 @@
 /* Begin PBXBuildFile section */
 		CE2A4CD425AEC95600FB7057 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CD325AEC95600FB7057 /* AppDelegate.swift */; };
 		CE2A4CD625AEC95600FB7057 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CD525AEC95600FB7057 /* SceneDelegate.swift */; };
-		CE2A4CD825AEC95600FB7057 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CD725AEC95600FB7057 /* ViewController.swift */; };
 		CE2A4CDB25AEC95600FB7057 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE2A4CD925AEC95600FB7057 /* Main.storyboard */; };
 		CE2A4CDD25AEC95800FB7057 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE2A4CDC25AEC95800FB7057 /* Assets.xcassets */; };
 		CE2A4CE025AEC95800FB7057 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE2A4CDE25AEC95800FB7057 /* LaunchScreen.storyboard */; };
+		CE2A4CF225AECB4100FB7057 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CF125AECB4100FB7057 /* MainTabController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		CE2A4CD025AEC95600FB7057 /* FireTwT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FireTwT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE2A4CD325AEC95600FB7057 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE2A4CD525AEC95600FB7057 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CE2A4CD725AEC95600FB7057 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CE2A4CDA25AEC95600FB7057 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE2A4CDC25AEC95800FB7057 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE2A4CDF25AEC95800FB7057 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE2A4CE125AEC95800FB7057 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE2A4CF125AECB4100FB7057 /* MainTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +56,63 @@
 		CE2A4CD225AEC95600FB7057 /* FireTwT */ = {
 			isa = PBXGroup;
 			children = (
+				CE2A4CE825AEC9E000FB7057 /* Model */,
+				CE2A4CEE25AEC9F600FB7057 /* View */,
+				CE2A4CED25AEC9F100FB7057 /* ViewModel */,
+				CE2A4CEC25AEC9F000FB7057 /* Controller */,
+				CE2A4CEB25AEC9EE00FB7057 /* API */,
+				CE2A4CE925AEC9E500FB7057 /* Utils */,
 				CE2A4CD325AEC95600FB7057 /* AppDelegate.swift */,
 				CE2A4CD525AEC95600FB7057 /* SceneDelegate.swift */,
-				CE2A4CD725AEC95600FB7057 /* ViewController.swift */,
 				CE2A4CD925AEC95600FB7057 /* Main.storyboard */,
 				CE2A4CDC25AEC95800FB7057 /* Assets.xcassets */,
 				CE2A4CDE25AEC95800FB7057 /* LaunchScreen.storyboard */,
 				CE2A4CE125AEC95800FB7057 /* Info.plist */,
 			);
 			path = FireTwT;
+			sourceTree = "<group>";
+		};
+		CE2A4CE825AEC9E000FB7057 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CE2A4CE925AEC9E500FB7057 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		CE2A4CEB25AEC9EE00FB7057 /* API */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		CE2A4CEC25AEC9F000FB7057 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				CE2A4CF125AECB4100FB7057 /* MainTabController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		CE2A4CED25AEC9F100FB7057 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		CE2A4CEE25AEC9F600FB7057 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,9 +185,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE2A4CD825AEC95600FB7057 /* ViewController.swift in Sources */,
 				CE2A4CD425AEC95600FB7057 /* AppDelegate.swift in Sources */,
 				CE2A4CD625AEC95600FB7057 /* SceneDelegate.swift in Sources */,
+				CE2A4CF225AECB4100FB7057 /* MainTabController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
