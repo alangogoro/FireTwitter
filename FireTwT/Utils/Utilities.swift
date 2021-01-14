@@ -51,4 +51,24 @@ class Utilities {
         return tf
     }
     
+    /**
+     建立一個包含2段文字的按鈕
+     - Parameter firstPart: 一般樣式文字
+     - Parameter secondPart: **粗體樣式文字**
+     */
+    func attributedButton(_ firstPart: String, _ secondPart: String) -> UIButton {
+        let button = UIButton()
+        
+        let attributedTitle =
+            NSMutableAttributedString(string: firstPart,
+                                      attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16),
+                                                   NSAttributedString.Key.foregroundColor: UIColor.white])
+        attributedTitle.append(NSAttributedString(string: secondPart,
+                                       attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16),
+                                                    NSAttributedString.Key.foregroundColor: UIColor.white]))
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        
+        return button
+    }
+    
 }

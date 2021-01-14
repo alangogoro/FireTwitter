@@ -41,6 +41,30 @@ class LoginController: UIViewController {
         return tf
     }()
     
+    private let loginButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Log In", for: .normal)
+        button.setTitleColor(.twitterBlue, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        
+        button.backgroundColor = .white
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.layer.cornerRadius = 5
+        
+        button.addTarget(self,
+                         action: #selector(handleLogin),
+                         for: .touchUpInside)
+        return button
+    }()
+    
+    private let dontHaveAccountButton: UIButton = {
+        let button = Utilities().attributedButton("Don't have an account?",
+                                                  " Sign Up")
+        button.addTarget(self,
+                         action: #selector(handleShowSignUp),
+                         for: .touchUpInside)
+        return button
+    }()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -51,6 +75,13 @@ class LoginController: UIViewController {
     }
     
     // MARK: - Selectors
+    @objc func handleLogin() {
+        
+    }
+    
+    @objc func handleShowSignUp() {
+        
+    }
     
     // MARK: - Helpers
     func configureUI() {
@@ -67,13 +98,23 @@ class LoginController: UIViewController {
         logoImageView.setDimensions(width: 150, height: 150)
         
         let stack = UIStackView(arrangedSubviews: [emailContainerView,
-                                                   passwordContainerView])
+                                                   passwordContainerView,
+                                                   loginButton])
         stack.axis = .vertical
-        stack.spacing = 8
+        stack.spacing = 20
+        /* ❗️⭐️ StackView 的區塊配置方式 ⭐️❗️ */
+        stack.distribution = .fillEqually
         
         view.addSubview(stack)
         stack.anchor(top: logoImageView.bottomAnchor,
                      left: view.leftAnchor, right: view.rightAnchor,
-                     paddingLeft: 16, paddingRight: 16)
+                     paddingLeft: 32, paddingRight: 32)
+        
+        view.addSubview(dontHaveAccountButton)
+        dontHaveAccountButton.anchor(left: view.leftAnchor,
+                                     bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                                     right: view.rightAnchor,
+                                     paddingLeft: 40,
+                                     paddingRight: 40)
     }
 }
