@@ -10,6 +10,8 @@ import UIKit
 class RegistrationController: UIViewController {
     
     // MARK: - Properties
+    private let imagePicker = UIImagePickerController()// ⭐️ 圖片選擇器
+    
     private let uploadPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .white
@@ -103,7 +105,7 @@ class RegistrationController: UIViewController {
     
     // MARK: - Selectors
     @objc func handleUploadPhoto() {
-         
+         present(imagePicker, animated: true, completion: nil)
     }
     
     @objc func handleRegistration() {
@@ -118,6 +120,10 @@ class RegistrationController: UIViewController {
     // MARK: - Helpers
     func configureUI() {
         view.backgroundColor = .twitterBlue
+        
+        /* ========== ⭐️ 初始化 ImagePickerController ⭐️ ========== */
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
         
         view.addSubview(uploadPhotoButton)
         uploadPhotoButton.centerX(inView: view,
@@ -146,4 +152,33 @@ class RegistrationController: UIViewController {
                                         paddingLeft: 40,
                                         paddingRight: 40)
     }
+}
+
+/* ========== ⭐️ 使用 ImagePickerController，需要同時遵從以下2種協定 ⭐️ ========== */
+extension RegistrationController: UIImagePickerControllerDelegate,
+                                  UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        /* ⭐️ .editedImage：使用者縮放、剪裁過後的圖片 */
+        guard let profileImage = info[.editedImage] as? UIImage else { return }
+        
+        /* ❗️⭐️ 在設置 UIButton 的圖片時，有分成單一色或原始色的按鈕圖片。
+         * 因此要先使用 withRenderingMode 調整該圖片 ⭐️❗️ */
+        let image = profileImage.withRenderingMode(.alwaysOriginal)
+        self.uploadPhotoButton.setImage(image, for: .normal)
+        
+        /* ⭐️ 設定 Button 圖片為圓形、維持圖片比例、裁切超過邊界的圖片、加上白色圓框 ⭐️ */
+        uploadPhotoButton.imageView?.contentMode = .scaleAspectFill
+        uploadPhotoButton.imageView?.clipsToBounds = true
+        uploadPhotoButton.layer.cornerRadius = 128 / 2
+        uploadPhotoButton.layer.borderColor = UIColor.white.cgColor
+        uploadPhotoButton.layer.borderWidth = 3
+        uploadPhotoButton.layer.masksToBounds = true
+        
+        // 關閉 ImagePickerController
+        dismiss(animated: true)
+    }
+    
 }
