@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Firebase
 
 class RegistrationController: UIViewController {
     
     // MARK: - Properties
     private let imagePicker = UIImagePickerController()// ⭐️ 圖片選擇器
+    private var profileImage: UIImage?
     
     private let uploadPhotoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -109,7 +111,55 @@ class RegistrationController: UIViewController {
     }
     
     @objc func handleRegistration() {
+        guard let profileImage = profileImage else {
+            print("===== ⚠️ DEBUG: Do not found profile image")
+            return
+        }
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        guard let fullname = fullnameTextField.text else { return }
+        guard let username = usernameTextField.text else { return }
         
+        /* ➡️ 在 Firebase Storage 上傳圖片，並取回該檔案的連結 */
+        // 壓縮照片，產生檔案名稱（UUID）
+        guard let imageData = profileImage.jpegData(compressionQuality: 0.3) else { return }
+        let filename = UUID().uuidString
+        
+        // ⭐️ 準備 Firebase Storage 中圖片要存放的位置 ⭐️
+        let ref = STORAGE_REF.child("profile_images")
+            .child(filename)
+        
+        // ⭐️ 在該位置上傳資料 putData ⭐️
+        ref.putData(imageData, metadata: nil) { (meta, error) in
+            // 上傳完畢後再取得檔案的連結
+            ref.downloadURL { (url, error) in
+                guard let profileImageUrl = url?.absoluteString else { return }
+                
+                /* ➡️ 在 Firebase 註冊，並更新資料庫（新增該帳號的資料） */
+                // 利用 Email, 密碼註冊帳號
+                Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+                    if let error = error {
+                        print("===== ⛔️ DEBUG: Error is \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    // 準備該帳號的資料欄位、值
+                    guard let uid = result?.user.uid else { return }
+                    let values = ["email": email,
+                                  "username": username,
+                                  "fullname": fullname,
+                                  "profileImageUrl": profileImageUrl]
+                    
+                    // ⭐️ 準備 Firebase Database 中資料要存放的位置 ⭐️
+                    let ref = DB_REF.child("users")
+                        .child(uid)
+                    // ⭐️ 在該位置更新資料 updateChildValues ⭐️
+                    ref.updateChildValues(values) { (error, ref) in
+                        print("===== ✅ DEBUG: Successfully updated user information")
+                    }
+                }
+            }
+        }
     }
     
     @objc func handleShowLogin() {
@@ -163,6 +213,7 @@ extension RegistrationController: UIImagePickerControllerDelegate,
         
         /* ⭐️ .editedImage：使用者縮放、剪裁過後的圖片 */
         guard let profileImage = info[.editedImage] as? UIImage else { return }
+        self.profileImage = profileImage
         
         /* ❗️⭐️ 在設置 UIButton 的圖片時，有分成單一色或原始色的按鈕圖片。
          * 因此要先使用 withRenderingMode 調整該圖片 ⭐️❗️ */

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,6 +23,7 @@
 		CEE9828725AFE48D0074B3AD /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9828625AFE48D0074B3AD /* RegistrationController.swift */; };
 		CEE9828A25AFEF8D0074B3AD /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9828925AFEF8D0074B3AD /* Utilities.swift */; };
 		CEE9829325B16E5D0074B3AD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEE9829225B16E5D0074B3AD /* GoogleService-Info.plist */; };
+		CEE982A725B1A3790074B3AD /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE982A625B1A3790074B3AD /* GlobalConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		CEE9828625AFE48D0074B3AD /* RegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
 		CEE9828925AFEF8D0074B3AD /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		CEE9829225B16E5D0074B3AD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		CEE982A625B1A3790074B3AD /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +76,6 @@
 				3DCB511DB04D56AFBA8339D5 /* Pods-FireTwT.debug.xcconfig */,
 				BEA455F74F3CACD80873DA4B /* Pods-FireTwT.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -128,6 +129,7 @@
 			children = (
 				CE2A4D0325AEF84E00FB7057 /* Extensions.swift */,
 				CEE9828925AFEF8D0074B3AD /* Utilities.swift */,
+				CEE982A625B1A3790074B3AD /* GlobalConstants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -300,6 +302,7 @@
 				CE2A4CF825AED49F00FB7057 /* ExploreController.swift in Sources */,
 				CE2A4CF225AECB4100FB7057 /* MainTabController.swift in Sources */,
 				CEE9828725AFE48D0074B3AD /* RegistrationController.swift in Sources */,
+				CEE982A725B1A3790074B3AD /* GlobalConstants.swift in Sources */,
 				CE2A4CF525AED46300FB7057 /* FeedController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
