@@ -24,6 +24,7 @@
 		CEE9828A25AFEF8D0074B3AD /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9828925AFEF8D0074B3AD /* Utilities.swift */; };
 		CEE9829325B16E5D0074B3AD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEE9829225B16E5D0074B3AD /* GoogleService-Info.plist */; };
 		CEE982A725B1A3790074B3AD /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE982A625B1A3790074B3AD /* GlobalConstants.swift */; };
+		CEFAED3025B57CA000C9FD71 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAED2F25B57CA000C9FD71 /* AuthService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		CEE9828925AFEF8D0074B3AD /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		CEE9829225B16E5D0074B3AD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		CEE982A625B1A3790074B3AD /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
+		CEFAED2F25B57CA000C9FD71 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 		CE2A4CEB25AEC9EE00FB7057 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				CEFAED2F25B57CA000C9FD71 /* AuthService.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				CE2A4CD425AEC95600FB7057 /* AppDelegate.swift in Sources */,
 				CE2A4D0425AEF84E00FB7057 /* Extensions.swift in Sources */,
 				CEE9828325AFE3E50074B3AD /* LoginController.swift in Sources */,
+				CEFAED3025B57CA000C9FD71 /* AuthService.swift in Sources */,
 				CE2A4CD625AEC95600FB7057 /* SceneDelegate.swift in Sources */,
 				CE2A4CF825AED49F00FB7057 /* ExploreController.swift in Sources */,
 				CE2A4CF225AECB4100FB7057 /* MainTabController.swift in Sources */,

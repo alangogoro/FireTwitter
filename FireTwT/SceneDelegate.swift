@@ -16,10 +16,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = scene as? UIWindowScene else { return }
         window = UIWindow(windowScene: scene)
         
-        let loginNav = UINavigationController(rootViewController: LoginController())
-        window?.rootViewController = loginNav
+        window?.rootViewController = MainTabController()
         window?.makeKeyAndVisible()
-        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
