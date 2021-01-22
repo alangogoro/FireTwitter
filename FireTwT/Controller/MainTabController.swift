@@ -6,10 +6,20 @@
 //
 
 import UIKit
+import Firebase
 
 class MainTabController: UITabBarController {
     
     // MARK: - Properties
+    var user: User? {
+        /* ⭐️ 把 TabController 得到的 user 指派給 FeedController ⭐️ */
+        didSet {
+            guard let nav = viewControllers?[0] as? UINavigationController else { return }
+            guard let feed = nav.viewControllers.first as? FeedController else { return }
+            feed.user = user
+        }
+    }
+    
     let actionButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .twitterBlue
@@ -26,14 +36,48 @@ class MainTabController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureViewControllers()
-        configureUI()
+        view.backgroundColor = .twitterBlue
+        authenticateUserAndConfigureUI()
         
+    }
+    
+    // MARK: - API
+    func authenticateUserAndConfigureUI() {
+        if Auth.auth().currentUser == nil {
+                print("===== ⚠️ DEBUG: User is NOT logged in")
+            DispatchQueue.main.async {
+                let nav = UINavigationController(rootViewController: LoginController())
+                // ⭐️ 呈現方式需為全螢幕，避免使用者以手勢下滑方式 dismiss 登入頁面（繞過登入）
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true)
+            }
+        } else {
+            configureViewControllers()
+            configureUI()
+            fetchUser()
+            print("===== ✅ DEBUG: User is logged in")
+        }
+    }
+    
+    func logUserOut() {
+        do {
+            try Auth.auth().signOut()
+        } catch let error {
+            print("===== ⛔️ DEBUG: Failed to Sign out with error \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchUser() {
+        UserService.shared.fetchUser { user in
+            self.user = user
+        }
     }
     
     // MARK: - Selectors
     @objc func actionButtonTapped() {
-        print("ActionButton Tapped!! 🔰🚧➡️⭐️⚠️❗️")
+        logUserOut()
+        print("===== ✅ DEBUG: User has logged out")
+        print("ActionButton Tapped!! ➡️⭐️⚠️❗️🔰🚧")
     }
     
     // MARK: - Helpers
@@ -60,9 +104,10 @@ class MainTabController: UITabBarController {
         view.addSubview(actionButton)
         
         /* ❗️view.safeAreaLayoutGuide
-         * 相較於 view，SafeArea 會適應各種尺寸的哀鳳螢幕，確保 UI 元件可以完整可見 */
+         * 相較於 view，SafeArea 會適應各種尺寸的哀鳳螢幕，確保 UI 元件可以完整可見❗️ */
         actionButton.layer.cornerRadius = 56 / 2
-        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
+        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                            right: view.rightAnchor,
                             paddingBottom: 64, paddingRight: 16,
                             width: 56, height: 56)
     }

@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Firebase
 
 class RegistrationController: UIViewController {
     
     // MARK: - Properties
     private let imagePicker = UIImagePickerController()// ⭐️ 圖片選擇器
+    private var profileImage: UIImage?
     
     private let uploadPhotoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -109,7 +111,33 @@ class RegistrationController: UIViewController {
     }
     
     @objc func handleRegistration() {
+        guard let profileImage = profileImage else {
+            print("===== ⚠️ DEBUG: Do not found profile image")
+            return
+        }
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        guard let fullname = fullnameTextField.text else { return }
+        guard let username = usernameTextField.text else { return }
         
+        let credentials = AuthCredentials(email: email,
+                                          password: password,
+                                          fullname: fullname,
+                                          username: username,
+                                          profileImage: profileImage)
+        AuthService.shared.registerUser(credentials: credentials) { (error, ref) in
+            print("===== ✅ DEBUG: Sign up successful")
+            
+            /* ⭐️ 利用 windows.first(where:) 指定主頁更新 UI，接著返回主頁 ⭐️ */
+            guard let window =
+                    UIApplication.shared.windows
+                    .first(where: { $0.isKeyWindow }) else { return }
+            guard let tab = window.rootViewController
+                    as? MainTabController else { return }
+            tab.authenticateUserAndConfigureUI()
+            
+            self.dismiss(animated: true)
+        }
     }
     
     @objc func handleShowLogin() {
@@ -163,6 +191,7 @@ extension RegistrationController: UIImagePickerControllerDelegate,
         
         /* ⭐️ .editedImage：使用者縮放、剪裁過後的圖片 */
         guard let profileImage = info[.editedImage] as? UIImage else { return }
+        self.profileImage = profileImage
         
         /* ❗️⭐️ 在設置 UIButton 的圖片時，有分成單一色或原始色的按鈕圖片。
          * 因此要先使用 withRenderingMode 調整該圖片 ⭐️❗️ */
