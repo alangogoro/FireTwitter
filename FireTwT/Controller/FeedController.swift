@@ -28,8 +28,8 @@ class FeedController: UIViewController {
         /* ⭐️ 為 NavigationItem 加上推特Logo圖片 ⭐️ */
         let titleView = UIImageView(image: UIImage(named: "twitter_logo_blue"))
         titleView.contentMode = .scaleAspectFit
+        titleView.setDimensions(width: 44, height: 44)
         navigationItem.titleView = titleView
-        
     }
     
     func configureLeftBarButton() {
