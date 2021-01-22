@@ -75,9 +75,12 @@ class MainTabController: UITabBarController {
     
     // MARK: - Selectors
     @objc func actionButtonTapped() {
-        logUserOut()
-        print("===== ✅ DEBUG: User has logged out")
-        print("ActionButton Tapped!! ➡️⭐️⚠️❗️🔰🚧")
+        //logUserOut()
+        //print("===== ✅ DEBUG: User has logged out")
+        
+        let nav = UINavigationController(rootViewController: UploadTweetController())
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
     }
     
     // MARK: - Helpers

@@ -24,6 +24,7 @@
 		CEE9828A25AFEF8D0074B3AD /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9828925AFEF8D0074B3AD /* Utilities.swift */; };
 		CEE9829325B16E5D0074B3AD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEE9829225B16E5D0074B3AD /* GoogleService-Info.plist */; };
 		CEE982A725B1A3790074B3AD /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE982A625B1A3790074B3AD /* GlobalConstants.swift */; };
+		CEF5024725BAC3D60053034C /* UploadTweetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF5024625BAC3D60053034C /* UploadTweetController.swift */; };
 		CEFAED3025B57CA000C9FD71 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAED2F25B57CA000C9FD71 /* AuthService.swift */; };
 		CEFAED3325B9311600C9FD71 /* UserServive.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAED3225B9311600C9FD71 /* UserServive.swift */; };
 		CEFAED3625B956BF00C9FD71 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAED3525B956BF00C9FD71 /* User.swift */; };
@@ -51,6 +52,7 @@
 		CEE9828925AFEF8D0074B3AD /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		CEE9829225B16E5D0074B3AD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		CEE982A625B1A3790074B3AD /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
+		CEF5024625BAC3D60053034C /* UploadTweetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadTweetController.swift; sourceTree = "<group>"; };
 		CEFAED2F25B57CA000C9FD71 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		CEFAED3225B9311600C9FD71 /* UserServive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserServive.swift; sourceTree = "<group>"; };
 		CEFAED3525B956BF00C9FD71 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				CE2A4CF725AED49F00FB7057 /* ExploreController.swift */,
 				CE2A4CFA25AED4E200FB7057 /* NotificationsController.swift */,
 				CE2A4CFD25AED52900FB7057 /* ConversationsController.swift */,
+				CEF5024625BAC3D60053034C /* UploadTweetController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				CEE9828325AFE3E50074B3AD /* LoginController.swift in Sources */,
 				CEFAED3025B57CA000C9FD71 /* AuthService.swift in Sources */,
 				CE2A4CD625AEC95600FB7057 /* SceneDelegate.swift in Sources */,
+				CEF5024725BAC3D60053034C /* UploadTweetController.swift in Sources */,
 				CEFAED3625B956BF00C9FD71 /* User.swift in Sources */,
 				CE2A4CF825AED49F00FB7057 /* ExploreController.swift in Sources */,
 				CE2A4CF225AECB4100FB7057 /* MainTabController.swift in Sources */,
