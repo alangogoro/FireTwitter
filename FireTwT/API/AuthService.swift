@@ -34,13 +34,13 @@ struct AuthService {
         let filename = UUID().uuidString
         
         // ⭐️ 準備 Firebase Storage 中圖片要存放的位置 ⭐️
-        let ref = STORAGE_REF.child("profile_images")
+        let storageRef = STORAGE_REF.child("profile_images")
             .child(filename)
         
         // ⭐️ 在 Storage 該位置上傳資料 putData ⭐️
-        ref.putData(imageData, metadata: nil) { (meta, error) in
+        storageRef.putData(imageData, metadata: nil) { (meta, error) in
             // 上傳完畢後再取得檔案的連結
-            ref.downloadURL { (url, error) in
+            storageRef.downloadURL { (url, error) in
                 guard let profileImageUrl = url?.absoluteString else { return }
                 
                 /* ➡️ 在 Firebase 註冊，並更新資料庫（新增該帳號的資料） */
@@ -59,11 +59,11 @@ struct AuthService {
                                   "profileImageUrl": profileImageUrl]
                     
                     // ⭐️ 準備 Firebase Database 中資料要存放的位置 ⭐️
-                    let ref = DB_REF.child("users")
+                    let dbRef = DB_REF.child("users")
                         .child(uid)
                     /* ⭐️ 在 Database 該位置更新資料 updateChildValues ⭐️
-                     * 並且透過傳出 @escaping Callback 函式自訂註冊後要執行的程式 */
-                    ref.updateChildValues(values) { (error, databaseRef) in
+                     * 並且透過傳出 @escaping Callback 函式自訂註冊結束後要執行的程式 */
+                    dbRef.updateChildValues(values) { (error, databaseRef) in
                         print("===== ☑️ DEBUG: Successfully updated user information")
                         completion(error, databaseRef)
                     }

@@ -11,6 +11,15 @@ import Firebase
 class MainTabController: UITabBarController {
     
     // MARK: - Properties
+    var user: User? {
+        /* ⭐️ 把 TabController 得到的 user 指派給 FeedController ⭐️ */
+        didSet {
+            guard let nav = viewControllers?[0] as? UINavigationController else { return }
+            guard let feed = nav.viewControllers.first as? FeedController else { return }
+            feed.user = user
+        }
+    }
+    
     let actionButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .twitterBlue
@@ -45,6 +54,7 @@ class MainTabController: UITabBarController {
         } else {
             configureViewControllers()
             configureUI()
+            fetchUser()
             print("===== ✅ DEBUG: User is logged in")
         }
     }
@@ -57,9 +67,17 @@ class MainTabController: UITabBarController {
         }
     }
     
+    func fetchUser() {
+        UserService.shared.fetchUser { user in
+            self.user = user
+        }
+    }
+    
     // MARK: - Selectors
     @objc func actionButtonTapped() {
-        print("ActionButton Tapped!! 🔰🚧➡️⭐️⚠️❗️")
+        logUserOut()
+        print("===== ✅ DEBUG: User has logged out")
+        print("ActionButton Tapped!! ➡️⭐️⚠️❗️🔰🚧")
     }
     
     // MARK: - Helpers
@@ -86,9 +104,10 @@ class MainTabController: UITabBarController {
         view.addSubview(actionButton)
         
         /* ❗️view.safeAreaLayoutGuide
-         * 相較於 view，SafeArea 會適應各種尺寸的哀鳳螢幕，確保 UI 元件可以完整可見 */
+         * 相較於 view，SafeArea 會適應各種尺寸的哀鳳螢幕，確保 UI 元件可以完整可見❗️ */
         actionButton.layer.cornerRadius = 56 / 2
-        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
+        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                            right: view.rightAnchor,
                             paddingBottom: 64, paddingRight: 16,
                             width: 56, height: 56)
     }

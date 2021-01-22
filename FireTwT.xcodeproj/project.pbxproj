@@ -25,6 +25,8 @@
 		CEE9829325B16E5D0074B3AD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEE9829225B16E5D0074B3AD /* GoogleService-Info.plist */; };
 		CEE982A725B1A3790074B3AD /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE982A625B1A3790074B3AD /* GlobalConstants.swift */; };
 		CEFAED3025B57CA000C9FD71 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAED2F25B57CA000C9FD71 /* AuthService.swift */; };
+		CEFAED3325B9311600C9FD71 /* UserServive.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAED3225B9311600C9FD71 /* UserServive.swift */; };
+		CEFAED3625B956BF00C9FD71 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAED3525B956BF00C9FD71 /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		CEE9829225B16E5D0074B3AD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		CEE982A625B1A3790074B3AD /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		CEFAED2F25B57CA000C9FD71 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		CEFAED3225B9311600C9FD71 /* UserServive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserServive.swift; sourceTree = "<group>"; };
+		CEFAED3525B956BF00C9FD71 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +126,7 @@
 		CE2A4CE825AEC9E000FB7057 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CEFAED3525B956BF00C9FD71 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -140,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				CEFAED2F25B57CA000C9FD71 /* AuthService.swift */,
+				CEFAED3225B9311600C9FD71 /* UserServive.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -303,11 +309,13 @@
 				CEE9828325AFE3E50074B3AD /* LoginController.swift in Sources */,
 				CEFAED3025B57CA000C9FD71 /* AuthService.swift in Sources */,
 				CE2A4CD625AEC95600FB7057 /* SceneDelegate.swift in Sources */,
+				CEFAED3625B956BF00C9FD71 /* User.swift in Sources */,
 				CE2A4CF825AED49F00FB7057 /* ExploreController.swift in Sources */,
 				CE2A4CF225AECB4100FB7057 /* MainTabController.swift in Sources */,
 				CEE9828725AFE48D0074B3AD /* RegistrationController.swift in Sources */,
 				CEE982A725B1A3790074B3AD /* GlobalConstants.swift in Sources */,
 				CE2A4CF525AED46300FB7057 /* FeedController.swift in Sources */,
+				CEFAED3325B9311600C9FD71 /* UserServive.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
