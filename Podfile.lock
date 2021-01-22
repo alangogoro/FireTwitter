@@ -85,6 +85,7 @@ PODS:
   - SDWebImage (5.10.2):
     - SDWebImage/Core (= 5.10.2)
   - SDWebImage/Core (5.10.2)
+  - SnapKit (5.0.1)
 
 DEPENDENCIES:
   - Firebase/Auth
@@ -92,6 +93,7 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/Storage
   - SDWebImage (~> 5.0)
+  - SnapKit (~> 5.0.0)
 
 SPEC REPOS:
   trunk:
@@ -111,6 +113,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SDWebImage
+    - SnapKit
 
 SPEC CHECKSUMS:
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
@@ -129,7 +132,8 @@ SPEC CHECKSUMS:
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SDWebImage: b969dcfc02c40a5da71eac0b03b8f1a0c794a86f
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 575c2ae70986eb47a99379ad55c6b87fa89d07f2
+PODFILE CHECKSUM: 7e5d67698e97426824bcc994357ff2c24f79c5a6
 
 COCOAPODS: 1.8.4
