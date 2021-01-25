@@ -75,12 +75,18 @@ class MainTabController: UITabBarController {
     
     // MARK: - Selectors
     @objc func actionButtonTapped() {
-        //logUserOut()
-        //print("===== ✅ DEBUG: User has logged out")
         
-        let nav = UINavigationController(rootViewController: UploadTweetController())
+        /* ➡️ 因為有自定義 UploadTweetController 的建構式
+         * 在建立該頁面時需要傳入參數 user */
+        guard let user = user else { return }
+        let controller = UploadTweetController(user: user)
+        
+        let nav = UINavigationController(rootViewController: controller)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
+        
+        //logUserOut()
+        //print("===== ✅ DEBUG: User has logged out")
     }
     
     // MARK: - Helpers
