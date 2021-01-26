@@ -27,4 +27,19 @@ struct TweetService {
             .updateChildValues(values,
                                withCompletionBlock: completion)
     }
+    
+    func fetchTweets(completion: @escaping ([Tweet]) -> Void) {
+        /* 🚧⚠️ ========== 工事なう ========== ⚠️🚧 */
+        var tweets = [Tweet]()
+        
+        DB_REF.child("tweets")
+            .observe(.childAdded) { snapshot in
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            
+            let tweetID = snapshot.key
+            let tweet = Tweet(tweetID: tweetID, dictionary: dictionary)
+            tweets.append(tweet)
+            completion(tweets)
+        }
+    }
 }

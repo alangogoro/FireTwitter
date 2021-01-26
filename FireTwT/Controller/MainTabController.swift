@@ -92,7 +92,8 @@ class MainTabController: UITabBarController {
     // MARK: - Helpers
     func configureViewControllers() {
         
-        let feed   = FeedController()
+        /* ❗️⭐️ 初始化 FlowLayout 的 CollectionViewController ⭐️❗️ */
+        let feed   = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
         let explor = ExploreController()
         let notis  = NotificationsController()
         let convs  = ConversationsController()
