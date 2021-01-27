@@ -11,6 +11,10 @@ import SnapKit
 class TweetCell: UICollectionViewCell {
     
     // MARK: - Properties
+    var tweet: Tweet? {
+        didSet { configure() }
+    }
+    
     private let profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
@@ -148,4 +152,12 @@ class TweetCell: UICollectionViewCell {
     }
     
     // MARK: - Helpers
+    func configure() {
+        guard let tweet = tweet else { return }
+        let viewModel = TweetViewModel(tweet: tweet)
+        
+        profileImageView.sd_setImage(with: viewModel.profileImageUrl)
+        infoLabel.text = tweet.user.username
+        captionLabel.text = tweet.caption
+    }
 }

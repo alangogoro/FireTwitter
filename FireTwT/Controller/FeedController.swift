@@ -15,19 +15,26 @@ class FeedController: UICollectionViewController {
     // MARK: - Properties
     var user: User? {
         didSet { configureLeftBarButton() }
-    } 
+    }
+    
+    private var tweets = [Tweet]() {
+        /* ❗️⭐️ 當此變數被賦值時，呼叫 CollectionView 重新整理 ⭐️❗️
+         * ➡️ 初載入頁面時，變數還是空陣列就會被 CollectionView 調用，造成 numberOfItems 回傳是 0
+         * 現在為變數加上 didSet 時去呼叫 CollectionView 重整，就會在從網路抓取完資料被賦值以後再執行一次 */
+        didSet { collectionView.reloadData() }
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        //fetchTweets()
+        fetchTweets()
     }
     
     // MARK: - API
     func fetchTweets() {
         TweetService.shared.fetchTweets { tweets in
-            print("\(tweets)")
+            self.tweets = tweets
         }
     }
     
@@ -62,23 +69,26 @@ class FeedController: UICollectionViewController {
     }
 }
 
+// MARK: - UICollectionViewDelegate/DataSource
 extension FeedController {
     override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int)
     -> Int {
-        return 5
+        return tweets.count
     }
     
     override func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath)
     -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
-                                                      for: indexPath)
-            as! TweetCell
+        let cell = collectionView
+            .dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
+                                 for: indexPath) as! TweetCell
+        cell.tweet = tweets[indexPath.row]
         return cell
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 /* ❗️⭐️ 遵從 CollectionViewDelegateFlowLayout 來自訂
  * item 的大小、間隔 ⭐️❗️ */
 extension FeedController: UICollectionViewDelegateFlowLayout {
