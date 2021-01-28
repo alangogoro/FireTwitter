@@ -8,6 +8,12 @@
 import UIKit
 import SnapKit
 
+/* ➡️ 當按下 Cell 的大頭貼，需要呼叫代理 FeedController
+ * 其中的 NavigationController 去 push 出該帳號的個人資料頁 */
+protocol TweetCellDelegate: class {
+    func handleProfileImageTapped()
+}
+
 class TweetCell: UICollectionViewCell {
     
     // MARK: - Properties
@@ -15,14 +21,30 @@ class TweetCell: UICollectionViewCell {
         didSet { configure() }
     }
     
-    private let profileImageView: UIImageView = {
+    weak var delegate: TweetCellDelegate?
+    
+    private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
         iv.setDimensions(width: 48, height: 48)
         iv.layer.cornerRadius = 48 / 2
+        iv.backgroundColor = .twitterBlue
         
-        iv.backgroundColor = .systemTeal
+        let button = UIButton(type: .system)
+        button.backgroundColor = .clear
+        button.setDimensions(width: 48, height: 48)
+        button.addTarget(self, action: #selector(handleProfileImageTapped), for: .touchUpInside)
+        iv.addSubview(button)
+        
+        /* ⭐️ 為 ImageView 加上觸碰手勢，便能像 Button 一樣觸發 ⭐️
+         * ❗️ 但要宣告為 lazy var */
+        let tap = UIGestureRecognizer(target: self,
+                                      action: #selector(handleProfileImageTapped))
+        iv.addGestureRecognizer(tap)
+        // ➡️ 允歲 ImageView 接收互動事件
+        iv.isUserInteractionEnabled = true
+        
         return iv
     }()
     
@@ -88,7 +110,7 @@ class TweetCell: UICollectionViewCell {
         
         addSubview(profileImageView)
         profileImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(12)
+            make.top.equalToSuperview().inset(8)
             make.left.equalToSuperview().inset(8)
         }
         
@@ -135,6 +157,11 @@ class TweetCell: UICollectionViewCell {
     
     
     // MARK: - Selectors
+    @objc func handleProfileImageTapped() {
+        print("ProfileImage Tapped ⚠️")
+        delegate?.handleProfileImageTapped()
+    }
+    
     @objc func handleCommentTapped() {
         
     }
