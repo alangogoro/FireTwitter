@@ -29,7 +29,6 @@ struct TweetService {
     }
     
     func fetchTweets(completion: @escaping ([Tweet]) -> Void) {
-        /* 🚧⚠️ ========== 工事なう ========== ⚠️🚧 */
         var tweets = [Tweet]()
         
         DB_REF.child("tweets")
@@ -46,3 +45,6 @@ struct TweetService {
         }
     }
 }
+
+
+/* 🚧⚠️ ========== 工事なう ========== ⚠️🚧 */
