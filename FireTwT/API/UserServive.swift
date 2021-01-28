@@ -9,8 +9,7 @@ import Firebase
 struct UserService {
     static let shared = UserService()
     
-    func fetchUser(completion: @escaping (User) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+    func fetchUser(uid: String, completion: @escaping (User) -> Void) {
         
         /* ⭐️ 在 Firebase Database 查詢使用者資料 ⭐️ */
         DB_REF.child("users").child(uid)
