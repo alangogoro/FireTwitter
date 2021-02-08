@@ -7,9 +7,19 @@
 
 import UIKit
 
+protocol ProfileHeaderDelegate: class {
+    func handleDismissal()
+}
+
 /* ⭐️🔰 CollectionReusableView 🔰⭐️ */
 class ProfileHeader: UICollectionReusableView {
     // MARK: - Properties
+    var user: User? {
+        didSet { configure() }
+    }
+    
+    weak var delegate: ProfileHeaderDelegate?
+    
     private let filterBar = ProfileFilterView()
     
     private lazy var containerView: UIView = {
@@ -79,6 +89,30 @@ class ProfileHeader: UICollectionReusableView {
         return label
     }()
     
+    private let followingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "0 Following"
+        
+        let followTap = UITapGestureRecognizer(target: self,
+                                               action: #selector(handleFollowersTapped))
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(followTap)
+        
+        return label
+    }()
+    
+    private let followersLabel: UILabel = {
+        let label = UILabel()
+        label.text = "2 Followers"
+        
+        let followTap = UITapGestureRecognizer(target: self,
+                                               action: #selector(handleFollowingTapped))
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(followTap)
+        
+        return label
+    }()
+    
     /// 跟隨使用者點選的標籤而橫向移動到該籤下部的藍色底線
     private let underlineView: UIView = {
         let view = UIView()
@@ -121,6 +155,16 @@ class ProfileHeader: UICollectionReusableView {
                                 paddingTop: 8,
                                 paddingLeft: 12, paddingRight: 12)
         
+        let followStack = UIStackView(arrangedSubviews: [followingLabel,
+                                                         followersLabel])
+        followStack.axis = .horizontal
+        followStack.spacing = 8
+        followStack.distribution = .fillEqually
+        
+        addSubview(followStack)
+        followStack.anchor(top: userDetailsStack.bottomAnchor, left: leftAnchor,
+                           paddingTop: 8, paddingLeft: 12)
+        
         addSubview(filterBar)
         filterBar.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor,
                          height: 50)
@@ -138,13 +182,35 @@ class ProfileHeader: UICollectionReusableView {
     
     // MARK: - Selectors
     @objc func handleEditProfileFollow() {
-        /* 🚧⚠️ ========== 工事なう ========== ⚠️🚧 */
+        
     }
     
     @objc func handleDismissal() {
-        /* 🚧⚠️ ========== 工事なう ========== ⚠️🚧 */
+        delegate?.handleDismissal()
     }
     
+    @objc func handleFollowersTapped() {
+        
+    }
+    
+    @objc func handleFollowingTapped() {
+        
+    }
+    
+    // MARK: - Helpers
+    func configure() {
+        guard let user = user else { return }
+        let viewModel = ProfileHeaderViewModel(user: user)
+        
+        fullnameLabel.text = user.fullname
+        usernameLabel.text = "@\(user.username)"
+        profileImageView.sd_setImage(with: user.profileImageUrl)
+        editProfileFollowButton.setTitle(viewModel.actionButtonTitle,
+                                         for: .normal)
+        
+        followingLabel.attributedText = viewModel.followersString
+        followersLabel.attributedText = viewModel.followersString
+    }
 }
 
 

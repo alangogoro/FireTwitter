@@ -5,6 +5,7 @@
 //  Created by usr on 2021/1/21.
 //
 import Foundation
+import Firebase
 
 struct User {
     let uid: String
@@ -12,6 +13,8 @@ struct User {
     let fullname: String
     let email: String
     var profileImageUrl: URL?
+    
+    var isCurrentUser: Bool { return Auth.auth().currentUser?.uid == uid }
     
     init(uid: String, dictionary: [String: Any]) {
         self.uid = uid

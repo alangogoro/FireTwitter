@@ -11,7 +11,7 @@ import SnapKit
 /* ➡️ 當按下 Cell 的大頭貼，需要呼叫代理 FeedController
  * 其中的 NavigationController 去 push 出該帳號的個人資料頁 */
 protocol TweetCellDelegate: class {
-    func handleProfileImageTapped()
+    func handleProfileImageTapped(_ cell: TweetCell)
 }
 
 class TweetCell: UICollectionViewCell {
@@ -31,19 +31,19 @@ class TweetCell: UICollectionViewCell {
         iv.layer.cornerRadius = 48 / 2
         iv.backgroundColor = .twitterBlue
         
-        let button = UIButton(type: .system)
+        /*let button = UIButton(type: .system)
         button.backgroundColor = .clear
         button.setDimensions(width: 48, height: 48)
         button.addTarget(self, action: #selector(handleProfileImageTapped), for: .touchUpInside)
-        iv.addSubview(button)
+        iv.addSubview(button)*/
         
         /* ⭐️ 為 ImageView 加上觸碰手勢，便能像 Button 一樣觸發 ⭐️
          * ❗️ 但要宣告為 lazy var */
-        let tap = UIGestureRecognizer(target: self,
-                                      action: #selector(handleProfileImageTapped))
-        iv.addGestureRecognizer(tap)
+        let tap = UITapGestureRecognizer(target: self,
+                                         action: #selector(handleProfileImageTapped))
         // ➡️ 允歲 ImageView 接收互動事件
         iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(tap)
         
         return iv
     }()
@@ -158,7 +158,7 @@ class TweetCell: UICollectionViewCell {
     
     // MARK: - Selectors
     @objc func handleProfileImageTapped() {
-        delegate?.handleProfileImageTapped()
+        delegate?.handleProfileImageTapped(self)
     }
     
     @objc func handleCommentTapped() {
