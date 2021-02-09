@@ -19,7 +19,7 @@ struct UserService {
             guard let dictionary = snapshot.value
                     as? [String: Any] else { return }
             let user = User(uid: uid, dictionary: dictionary)
-            print("===== ✅ DEBUG: Fetch user \(user.username) data successful")
+            //print("===== ✅ DEBUG: Fetch user \(user.username) data successful")
             completion(user)
         }
     }
