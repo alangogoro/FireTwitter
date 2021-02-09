@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class ConversationsController: UIViewController {
     
@@ -17,6 +18,11 @@ class ConversationsController: UIViewController {
         
         configureUI()
         
+        do {
+            try Auth.auth().signOut()
+        } catch let error {
+            print("===== ⛔️ DEBUG: Failed to Sign out with error \(error.localizedDescription)")
+        }
     }
     
     // MARK: - Helpers
