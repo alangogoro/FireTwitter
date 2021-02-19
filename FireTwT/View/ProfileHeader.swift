@@ -9,7 +9,9 @@ import UIKit
 
 protocol ProfileHeaderDelegate: class {
     func handleDismissal()
+    func handleEditProfileFollow(_ header: ProfileHeader)
 }
+
 
 /* ⭐️🔰 CollectionReusableView 🔰⭐️ */
 class ProfileHeader: UICollectionReusableView {
@@ -51,7 +53,7 @@ class ProfileHeader: UICollectionReusableView {
         return iv
     }()
     
-    private lazy var editProfileFollowButton: UIButton = {
+    lazy var editProfileFollowButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Loading", for: .normal)
         button.setTitleColor(.twitterBlue, for: .normal)
@@ -89,7 +91,6 @@ class ProfileHeader: UICollectionReusableView {
     
     private let followingLabel: UILabel = {
         let label = UILabel()
-        label.text = "0 Following"
         
         let followTap = UITapGestureRecognizer(target: self,
                                                action: #selector(handleFollowersTapped))
@@ -101,7 +102,6 @@ class ProfileHeader: UICollectionReusableView {
     
     private let followersLabel: UILabel = {
         let label = UILabel()
-        label.text = "2 Followers"
         
         let followTap = UITapGestureRecognizer(target: self,
                                                action: #selector(handleFollowingTapped))
@@ -180,7 +180,7 @@ class ProfileHeader: UICollectionReusableView {
     
     // MARK: - Selectors
     @objc func handleEditProfileFollow() {
-        
+        delegate?.handleEditProfileFollow(self)
     }
     
     @objc func handleDismissal() {
@@ -207,7 +207,7 @@ class ProfileHeader: UICollectionReusableView {
                                          for: .normal)
         
         followingLabel.attributedText = viewModel.followersString
-        followersLabel.attributedText = viewModel.followersString
+        followersLabel.attributedText = viewModel.followingString
     }
 }
 
@@ -231,3 +231,4 @@ extension ProfileHeader: ProfileFilterViewDelegate {
     }
     
 }
+

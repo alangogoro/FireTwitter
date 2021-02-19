@@ -25,7 +25,6 @@ struct UserService {
     }
     
     func fetchUsers(completion: @escaping ([User]) -> Void) {
-        
         var users = [User]()
         
         DB_REF.child("users").observe(.childAdded) { snapshot in
@@ -36,6 +35,69 @@ struct UserService {
             let user = User(uid: uid, dictionary: dictionary)
             users.append(user)
             completion(users)
+        }
+    }
+    
+    func followUser(uid: String,
+                    completion: @escaping (Error?, DatabaseReference) -> Void) {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        
+        let FOLLOWING_REF = DB_REF.child("user-following")
+        let FOLLOWERS_REF = DB_REF.child("user-followers")
+        
+        FOLLOWING_REF.child(currentUid)
+            .updateChildValues([uid: 1]) { (err, ref) in
+            print("===== ☑️ DEBUG: Current uid \(currentUid) started following \(uid)")
+            FOLLOWERS_REF.child(uid)
+                .updateChildValues([currentUid: 1], withCompletionBlock: completion)
+        }
+    }
+    
+    func unfollowUser(uid: String,
+                      completion: @escaping (Error?, DatabaseReference) -> ()) {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        
+        let FOLLOWING_REF = DB_REF.child("user-following")
+        let FOLLOWERS_REF = DB_REF.child("user-followers")
+        
+        /* ⭐️ 從 Realtime Database
+         * 刪除 following 與 followers 的兩筆資料 ⭐️ */
+        FOLLOWING_REF.child(currentUid)
+            .child(uid).removeValue { (err, ref) in
+            FOLLOWERS_REF.child(uid)
+                .child(currentUid).removeValue(completionBlock: completion)
+        }
+    }
+    
+    func checkIfFollowing(uid: String,
+                          completion: @escaping (Bool) -> ()) {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        
+        /* ⭐️ 確認查詢的資料是否存在
+         * snapshot.exist() ⭐️ */
+        DB_REF.child("user-following")
+            .child(currentUid)
+            .child(uid).observeSingleEvent(of: .value) { snapshot in
+                completion(snapshot.exists()) // 回傳 Bool
+        }
+    }
+    
+    func fetchUserStates(uid: String, completion: @escaping (UserFollowStats) -> ()) {
+        
+        let FOLLOWING_REF = DB_REF.child("user-following")
+        let FOLLOWERS_REF = DB_REF.child("user-followers")
+        
+        FOLLOWERS_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
+            /* ⭐️ SnapShot.children.allObjects ⭐️ */
+            let followers = snapshot.children.allObjects.count
+            
+            FOLLOWING_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
+                let following = snapshot.children.allObjects.count
+                
+                let stats = UserFollowStats(followers: followers,
+                                            following: following)
+                completion(stats)
+            }
         }
     }
 }
