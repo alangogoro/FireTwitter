@@ -19,6 +19,8 @@
 		CE2A4CFB25AED4E200FB7057 /* NotificationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CFA25AED4E200FB7057 /* NotificationsController.swift */; };
 		CE2A4CFE25AED52900FB7057 /* ConversationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CFD25AED52900FB7057 /* ConversationsController.swift */; };
 		CE2A4D0425AEF84E00FB7057 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4D0325AEF84E00FB7057 /* Extensions.swift */; };
+		CE2AE53825E3862B005FC1C3 /* TweetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2AE53725E3862B005FC1C3 /* TweetController.swift */; };
+		CE2AE53B25E38AE4005FC1C3 /* TweetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2AE53A25E38AE4005FC1C3 /* TweetHeader.swift */; };
 		CE600CF425D764C4005BC1B8 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE600CF325D764C4005BC1B8 /* UserCell.swift */; };
 		CE73835925C29B4300AA7704 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73835825C29B4300AA7704 /* ProfileController.swift */; };
 		CE73835C25C2C04700AA7704 /* ProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73835B25C2C04700AA7704 /* ProfileHeader.swift */; };
@@ -58,6 +60,8 @@
 		CE2A4CFA25AED4E200FB7057 /* NotificationsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsController.swift; sourceTree = "<group>"; };
 		CE2A4CFD25AED52900FB7057 /* ConversationsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsController.swift; sourceTree = "<group>"; };
 		CE2A4D0325AEF84E00FB7057 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		CE2AE53725E3862B005FC1C3 /* TweetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetController.swift; sourceTree = "<group>"; };
+		CE2AE53A25E38AE4005FC1C3 /* TweetHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetHeader.swift; sourceTree = "<group>"; };
 		CE600CF325D764C4005BC1B8 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		CE73835825C29B4300AA7704 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		CE73835B25C2C04700AA7704 /* ProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeader.swift; sourceTree = "<group>"; };
@@ -187,6 +191,7 @@
 				CE2A4CFD25AED52900FB7057 /* ConversationsController.swift */,
 				CEF5024625BAC3D60053034C /* UploadTweetController.swift */,
 				CE73835825C29B4300AA7704 /* ProfileController.swift */,
+				CE2AE53725E3862B005FC1C3 /* TweetController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -209,6 +214,7 @@
 				CE856AC825C93F12000C684F /* ProfileFilterView.swift */,
 				CE856ACB25C942AF000C684F /* ProfileFilterCell.swift */,
 				CE600CF325D764C4005BC1B8 /* UserCell.swift */,
+				CE2AE53A25E38AE4005FC1C3 /* TweetHeader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -346,6 +352,7 @@
 				CE2A4CD425AEC95600FB7057 /* AppDelegate.swift in Sources */,
 				CE2A4D0425AEF84E00FB7057 /* Extensions.swift in Sources */,
 				CEE9828325AFE3E50074B3AD /* LoginController.swift in Sources */,
+				CE2AE53825E3862B005FC1C3 /* TweetController.swift in Sources */,
 				CE73835925C29B4300AA7704 /* ProfileController.swift in Sources */,
 				CE73835C25C2C04700AA7704 /* ProfileHeader.swift in Sources */,
 				CEF5026725BFC5C00053034C /* TweetCell.swift in Sources */,
@@ -357,6 +364,7 @@
 				CE2A4CF825AED49F00FB7057 /* ExploreController.swift in Sources */,
 				CE2A4CF225AECB4100FB7057 /* MainTabController.swift in Sources */,
 				CEE9828725AFE48D0074B3AD /* RegistrationController.swift in Sources */,
+				CE2AE53B25E38AE4005FC1C3 /* TweetHeader.swift in Sources */,
 				CED2D35825C16009001E76D9 /* TweetViewModel.swift in Sources */,
 				CEE982A725B1A3790074B3AD /* GlobalConstants.swift in Sources */,
 				CE2A4CF525AED46300FB7057 /* FeedController.swift in Sources */,

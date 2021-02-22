@@ -95,6 +95,13 @@ extension FeedController {
         
         return cell
     }
+    
+    override func collectionView(_ collectionView: UICollectionView,
+                                 didSelectItemAt indexPath: IndexPath) {
+        // ➡️ 生成 FlowLayout 的 CollectionView 頁面
+        let controller = TweetController(tweet: tweets[indexPath.row])
+        navigationController?.pushViewController(controller, animated: true)
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -103,7 +110,8 @@ extension FeedController {
 extension FeedController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+                        sizeForItemAt indexPath: IndexPath)
+    -> CGSize {
         return CGSize(width: view.frame.width, height: 120)
     }
 }

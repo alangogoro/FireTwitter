@@ -31,12 +31,6 @@ class TweetCell: UICollectionViewCell {
         iv.layer.cornerRadius = 48 / 2
         iv.backgroundColor = .twitterBlue
         
-        /*let button = UIButton(type: .system)
-        button.backgroundColor = .clear
-        button.setDimensions(width: 48, height: 48)
-        button.addTarget(self, action: #selector(handleProfileImageTapped), for: .touchUpInside)
-        iv.addSubview(button)*/
-        
         /* ⭐️ 為 ImageView 加上觸碰手勢，便能像 Button 一樣觸發 ⭐️
          * ❗️ 但要宣告為 lazy var */
         let tap = UITapGestureRecognizer(target: self,

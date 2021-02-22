@@ -13,7 +13,8 @@ protocol ProfileHeaderDelegate: class {
 }
 
 
-/* ⭐️🔰 CollectionReusableView 🔰⭐️ */
+/* ⭐️🔰 CollectionReusableView 🔰⭐️
+ * 使用於 CollectionView 的 Header 類別 */
 class ProfileHeader: UICollectionReusableView {
     // MARK: - Properties
     var user: User? {
