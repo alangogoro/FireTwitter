@@ -80,7 +80,7 @@ class MainTabController: UITabBarController {
         /* ➡️ 因為有自定義 UploadTweetController 的建構式
          * 在建立該頁面時需要傳入參數 user */
         guard let user = user else { return }
-        let controller = UploadTweetController(user: user)
+        let controller = UploadTweetController(user: user, config: .tweet)
         
         let nav = UINavigationController(rootViewController: controller)
         nav.modalPresentationStyle = .fullScreen

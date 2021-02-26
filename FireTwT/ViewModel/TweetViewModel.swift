@@ -16,6 +16,10 @@ struct TweetViewModel {
         return user.profileImageUrl
     }
     
+    var usernameText: String {
+        return "@" + user.username
+    }
+    
     var userInfoText: NSAttributedString {
         let title = NSMutableAttributedString(string: user.fullname,
                                               attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
@@ -35,7 +39,7 @@ struct TweetViewModel {
         return title
     }
     
-    /// Tweet 的發文時間是多久以前
+    /// Tweet 的發文時間距今有多久
     var timestamp: String {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.second, .minute, .hour, .day, .weekOfMonth]
@@ -45,8 +49,47 @@ struct TweetViewModel {
         return formatter.string(from: tweet.timestamp, to: now) ?? "0m"
     }
     
+    var headerTimestamp: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a・MM/dd/yyyy"
+        return formatter.string(from: tweet.timestamp)
+    }
+    
+    var retweetAttributedString: NSAttributedString? {
+        return attributedString(withValue: tweet.retweetCount, text: "Retweets")
+    }
+    var likesAttributedString: NSAttributedString? {
+        return attributedString(withValue: tweet.likes, text: "Likes")
+    }
+    
     init(tweet: Tweet) {
         self.tweet = tweet
         self.user = tweet.user
+    }
+    
+    fileprivate func attributedString(withValue value: Int, text: String) -> NSAttributedString {
+        let attributedTitle =
+            NSMutableAttributedString(string: "\(value)",
+                                      attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
+        attributedTitle
+            .append(NSAttributedString(string: " \(text)",
+                                       attributes: [.font: UIFont.systemFont(ofSize: 14),
+                                                    .foregroundColor: UIColor.lightGray]))
+        return attributedTitle
+    }
+    
+    /// 傳入螢幕寬度以計算出每條 Tweet Cell 所需要的尺寸
+    func measuredSize(forWidth width: CGFloat) -> CGSize {
+        let measureLabel = UILabel()
+        measureLabel.text = tweet.caption
+        measureLabel.numberOfLines = 0
+        measureLabel.lineBreakMode = .byWordWrapping // 斷行單位
+        
+        // ⭐️ AutoLayout 設定寬度 ⭐️
+        measureLabel.translatesAutoresizingMaskIntoConstraints = false
+        measureLabel.widthAnchor.constraint(equalToConstant: width).isActive = true
+        
+        // ❗️回傳 View 元件在遵守了寬度約束之下最緊湊適配的 Size❗️
+        return measureLabel.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
 }

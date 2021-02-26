@@ -12,6 +12,8 @@ class UploadTweetController: UIViewController {
     
     // MARK: - Properties
     private let user: User
+    private let config: UploadTweetConfiguration
+    private lazy var viewModel = UploadTweetViewModel(config: config)
     
     /*    ❗️lazy var❗️
      * 被宣告為 lazy var 的物件不會在 viewDidLoad⋯ 情況生成
@@ -36,14 +38,22 @@ class UploadTweetController: UIViewController {
         return button
     }()
     
+    private lazy var replyLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .lightGray
+        label.text = "Replying to @username"
+        label.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        return label
+    }()
+    
     private let profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
         iv.setDimensions(width: 48, height: 48)
         iv.layer.cornerRadius = 48 / 2
-        
-        iv.backgroundColor = .systemTeal
+        iv.backgroundColor = .twitterBlue
         return iv
     }()
     
@@ -51,8 +61,9 @@ class UploadTweetController: UIViewController {
     
     // MARK: - Lifecycle
     /* ⭐️ 自定義建構式，需傳入 User 物件才能生成頁面 ⭐️ */
-    init(user: User) {
+    init(user: User, config: UploadTweetConfiguration) {
         self.user = user
+        self.config = config
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -73,7 +84,7 @@ class UploadTweetController: UIViewController {
     @objc func handleUploadTweet() {
         guard let caption = captionTextView.text else { return }
         
-        TweetService.shared.uploadTweet(caption: caption) { (error, ref) in
+        TweetService.shared.uploadTweet(caption: caption, type: config) { (error, ref) in
             if let error = error {
                 print("===== ⛔️ DEBUG: Failed to Upload tweet with error \(error.localizedDescription)")
                 return
@@ -91,18 +102,32 @@ class UploadTweetController: UIViewController {
         
         configureNavigationBar()
         
-        let stack = UIStackView(arrangedSubviews: [profileImageView,
-                                                   captionTextView])
-        stack.axis = .horizontal
+        let typingAreaStack = UIStackView(arrangedSubviews: [profileImageView,
+                                                             captionTextView])
+        typingAreaStack.axis = .horizontal
+        typingAreaStack.spacing = 12
+        typingAreaStack.alignment = .leading
+        
+        let stack = UIStackView(arrangedSubviews: [replyLabel,
+                                                   typingAreaStack])
+        stack.axis = .vertical
         stack.spacing = 12
         
         view.addSubview(stack)
         stack.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(16)
-            make.left.equalToSuperview().inset(16)
-            make.right.equalToSuperview().inset(16)
+            make.left.right.equalToSuperview().inset(16)
         }
         profileImageView.sd_setImage(with: user.profileImageUrl, completed: nil)
+        
+        // 根據使用者是要 Tweet(發推)|Reply(回推) 顯示不同的提示文字
+        actionButton.setTitle(viewModel.actionButtonTitle, for: .normal)
+        captionTextView.placeholderLabel.text = viewModel.placeholderText
+        // 如果是回推，顯示 "正在回覆@使用者" 的 Label
+        /* 因為此 Label 放在 StackView 中，會順便把其它 UI 往下擠 */
+        replyLabel.isHidden = !viewModel.shouldShowReplyLabel
+        guard let replyText = viewModel.replyText else { return }
+        replyLabel.text = replyText
     }
     
     func configureNavigationBar() {
