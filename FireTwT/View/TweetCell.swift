@@ -12,6 +12,7 @@ import SnapKit
  * 其中的 NavigationController 去 push 出該帳號的個人資料頁 */
 protocol TweetCellDelegate: class {
     func handleProfileImageTapped(_ cell: TweetCell)
+    func handleReplyTapped(_ cell: TweetCell)
 }
 
 class TweetCell: UICollectionViewCell {
@@ -30,12 +31,6 @@ class TweetCell: UICollectionViewCell {
         iv.setDimensions(width: 48, height: 48)
         iv.layer.cornerRadius = 48 / 2
         iv.backgroundColor = .twitterBlue
-        
-        /*let button = UIButton(type: .system)
-        button.backgroundColor = .clear
-        button.setDimensions(width: 48, height: 48)
-        button.addTarget(self, action: #selector(handleProfileImageTapped), for: .touchUpInside)
-        iv.addSubview(button)*/
         
         /* ⭐️ 為 ImageView 加上觸碰手勢，便能像 Button 一樣觸發 ⭐️
          * ❗️ 但要宣告為 lazy var */
@@ -162,7 +157,7 @@ class TweetCell: UICollectionViewCell {
     }
     
     @objc func handleCommentTapped() {
-        
+        delegate?.handleReplyTapped(self)
     }
     
     @objc func handleRetweetTapped() {

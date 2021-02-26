@@ -28,10 +28,10 @@ struct ProfileHeaderViewModel {
     let usernameText: String
     
     var followersString: NSAttributedString? {
-        return attributedText(withValue: user.stats?.followers ?? 0, text: "followers")
+        return attributedString(withValue: user.stats?.followers ?? 0, text: "followers")
     }
     var followingString: NSAttributedString? {
-        return attributedText(withValue: user.stats?.following ?? 0, text: "following")
+        return attributedString(withValue: user.stats?.following ?? 0, text: "following")
     }
     
     var actionButtonTitle: String {
@@ -54,7 +54,7 @@ struct ProfileHeaderViewModel {
         self.usernameText = "@" + user.username
     }
     
-    fileprivate func attributedText(withValue value: Int, text: String) -> NSAttributedString {
+    fileprivate func attributedString(withValue value: Int, text: String) -> NSAttributedString {
         let attributedTitle = NSMutableAttributedString(string: "\(value)",
                                                         attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
         attributedTitle.append(NSAttributedString(string: " \(text)",

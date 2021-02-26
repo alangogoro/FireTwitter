@@ -13,7 +13,8 @@ protocol ProfileHeaderDelegate: class {
 }
 
 
-/* ⭐️🔰 CollectionReusableView 🔰⭐️ */
+/* ⭐️🔰 CollectionReusableView 🔰⭐️
+ * 使用於 CollectionView 的 Header 類別 */
 class ProfileHeader: UICollectionReusableView {
     // MARK: - Properties
     var user: User? {
@@ -215,12 +216,14 @@ class ProfileHeader: UICollectionReusableView {
 // MARK: - ProfileFilterViewDelegate
 extension ProfileHeader: ProfileFilterViewDelegate {
     
-    func filterView(_ view: ProfileFilterView, didSelect indexPath: IndexPath) {
+    func filterView(_ filterView: ProfileFilterView,
+                    didSelect indexPath: IndexPath) {
         /* ➡️ 先透過 protocol-delegate 的方式取得
          * 標籤頁面中的 collectionView 被選取的 Cell
          * 🔰 CollectionView.cellForItem(at: ) 🔰 */
-        guard let cell = view.collectionView
-                .cellForItem(at: indexPath) as? ProfileFilterCell
+        guard let cell = filterView
+                .collectionView.cellForItem(at: indexPath)
+                as? ProfileFilterCell
         else { return }
         
         /* ⭐️ 再取得 Cell 的 X軸 座標，讓底下的 X軸 座標動畫移動 ⭐️ */

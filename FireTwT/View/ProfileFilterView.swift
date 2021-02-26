@@ -11,7 +11,8 @@ private let reuseIdentifier = "ProfileFilterCell"
 
 protocol ProfileFilterViewDelegate: class {
     /// 透過代理傳達使用者選取了哪一個 CollectionView 的標籤
-    func filterView(_ view: ProfileFilterView, didSelect indexPath: IndexPath)
+    func filterView(_ filterView: ProfileFilterView,
+                    didSelect indexPath: IndexPath)
 }
 
 class ProfileFilterView: UIView {

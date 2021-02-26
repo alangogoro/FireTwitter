@@ -19,6 +19,7 @@ class ProfileController: UICollectionViewController {
         didSet { collectionView.reloadData() }
     }
     
+    
     // MARK: - Lifecycle
     init(user: User) {
         self.user = user
@@ -46,6 +47,7 @@ class ProfileController: UICollectionViewController {
     
     // MARK: - Selectors
     
+    
     // MARK: - API
     func fetchTweets() {
         TweetService.shared.fetchTweets(forUser: user) { tweets in
@@ -68,6 +70,7 @@ class ProfileController: UICollectionViewController {
         }
     }
     
+    
     // MARK: - Helpers
     func configureCollectionView() {
         collectionView.backgroundColor = .white
@@ -83,6 +86,7 @@ class ProfileController: UICollectionViewController {
                                 forCellWithReuseIdentifier: reuseIdentifier)
     }
 }
+
 
 // MARK: - UICollectionViewDataSource
 extension ProfileController {
