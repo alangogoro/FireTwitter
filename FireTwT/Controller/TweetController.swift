@@ -18,11 +18,15 @@ class TweetController: UICollectionViewController {
         didSet { collectionView.reloadData() }
     }
     
+    private let actionSheetLauncher: ActionSheetLauncher
+    
     // MARK: - Lifecycle
     init(tweet: Tweet) {
         self.tweet = tweet
+        self.actionSheetLauncher = ActionSheetLauncher(user: tweet.user)
         /* ⭐️ 初始化 CollectionViewController 時，必須呼叫其原始建構式 ⭐️ */
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
+        
     }
     
     required init?(coder: NSCoder) {
@@ -69,7 +73,9 @@ extension TweetController {
     override func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath)
     -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
+        let cell = collectionView
+            .dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
+                                 for: indexPath) as! TweetCell
         cell.tweet = replies[indexPath.row]
         return cell
     }
@@ -88,6 +94,7 @@ extension TweetController {
                                               withReuseIdentifier: headerIdentifier,
                                               for: indexPath) as! TweetHeader
         header.tweet = tweet
+        header.delegate = self
         return header
         
     }
@@ -120,5 +127,12 @@ extension TweetController: UICollectionViewDelegateFlowLayout {
         let viewModel = TweetViewModel(tweet: replies[indexPath.row])
         let textHight = viewModel.measuredSize(forWidth: view.frame.width).height
         return CGSize(width: view.frame.width, height: textHight + 66)
+    }
+}
+
+// MARK: - TweetHeaderDelegate
+extension TweetController: TweetHeaderDelegate {
+    func showActionSheet() {
+        actionSheetLauncher.show()
     }
 }

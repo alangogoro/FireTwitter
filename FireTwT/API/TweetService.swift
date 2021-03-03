@@ -91,6 +91,7 @@ struct TweetService {
         }
     }
     
+    /// 查詢 Tweet 回推
     func fetchReplies(forTweet tweet: Tweet,
                       completion: @escaping ([Tweet]) -> ()) {
         var replies = [Tweet]()
@@ -105,6 +106,7 @@ struct TweetService {
             guard let uid = dictionary["uid"]
                     as? String else { return }
             
+            // 查詢回推的帳號資料
             UserService.shared.fetchUser(uid: uid) { user in
                 let reply = Tweet(tweetID: tweetID,
                                   user: user,
