@@ -8,6 +8,10 @@
 import UIKit
 import SnapKit
 
+protocol TweetHeaderDelegate: class {
+    func showActionSheet()
+}
+
 /* ⭐️🔰 CollectionReusableView 🔰⭐️
  * 使用於 CollectionView 的 Header 類別 */
 class TweetHeader: UICollectionReusableView {
@@ -16,6 +20,8 @@ class TweetHeader: UICollectionReusableView {
     var tweet: Tweet? {
         didSet { configure() }
     }
+    
+    weak var delegate: TweetHeaderDelegate?
     
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
@@ -203,7 +209,7 @@ class TweetHeader: UICollectionReusableView {
     }
     
     @objc func handleActionSheet() {
-        print("======= DEBUG: Handle show action sheet")
+        delegate?.showActionSheet()
     }
     
     @objc func handleCommentTapped() {
