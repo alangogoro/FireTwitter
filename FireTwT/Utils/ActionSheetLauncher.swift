@@ -10,12 +10,19 @@ import UIKit
 
 private let reuseIdentifier = "ActionSheetCell"
 
+protocol ActionSheetLauncherDelegate: class {
+    func didSelect(option: ActionSheetOption)
+}
+
                      /* ⭐️ NSObject ⭐️ */
 class ActionSheetLauncher: NSObject {
     
     // MARK: - Properties
     private let user: User
     private let tableView = UITableView()
+    private lazy var viewModel = ActionSheetViewModel(user: user)
+    weak var delegate: ActionSheetLauncherDelegate?
+    private var tableViewHeight: CGFloat?
     
     /* ⭐️ 以此存取 App 正在使用的 window ⭐️ */
     private var window: UIWindow?
@@ -80,15 +87,24 @@ class ActionSheetLauncher: NSObject {
         
         // 在 UIWindow 上加入視圖，才能確保覆蓋一整個 App 畫面
         window.addSubview(tableView)
-        let _height = CGFloat(3 * 60) + 100
+        let height = CGFloat(viewModel.options.count * 60) + 100
         tableView.frame = CGRect(x: 0, y: window.frame.height,
-                                 width: window.frame.width, height: _height)
+                                 width: window.frame.width, height: height)
+        self.tableViewHeight = height
         
         /* ⭐️ 動畫呈現 ActionSheet ⭐️ */
         UIView.animate(withDuration: 0.5) {
             self.dimView.alpha = 1
-            self.tableView.frame.origin.y -= _height
+            self.showTableView(true)
         }
+    }
+    
+    func showTableView(_ shouldShow: Bool) {
+        guard let window = window else { return }
+        guard let height = tableViewHeight else { return }
+        
+        let y = shouldShow ? window.frame.height - height : window.frame.height
+        tableView.frame.origin.y = y
     }
     
     func configureTableView() {
@@ -114,11 +130,12 @@ class ActionSheetLauncher: NSObject {
     }
 }
 
+// MARK: - UITableView
 extension ActionSheetLauncher: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int)
     -> Int {
-        return 3
+        return viewModel.options.count
     }
     
     func tableView(_ tableView: UITableView,
@@ -127,6 +144,7 @@ extension ActionSheetLauncher: UITableViewDataSource {
         let cell = tableView
             .dequeueReusableCell(withIdentifier: reuseIdentifier,
                                  for: indexPath) as! ActionSheetCell
+        cell.option = viewModel.options[indexPath.row]
         return cell
     }
 }
@@ -138,9 +156,24 @@ extension ActionSheetLauncher: UITableViewDelegate {
     -> UIView? {
         return footerView
     }
+    
     func tableView(_ tableView: UITableView,
                    heightForHeaderInSection section: Int)
     -> CGFloat {
         return 60
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   didSelectRowAt indexPath: IndexPath) {
+        let option = viewModel.options[indexPath.row]
+        
+        // ➡️ ActionSheet 動畫結束後依照所選項目呼叫代理
+        UIView.animate(withDuration: 0.5) {
+            self.dimView.alpha = 0
+            self.showTableView(false)
+        } completion: { _ in
+            self.delegate?.didSelect(option: option)
+        }
+        
     }
 }
