@@ -40,7 +40,24 @@ class FeedController: UICollectionViewController {
     // MARK: - API
     func fetchTweets() {
         TweetService.shared.fetchTweets { tweets in
+            /* ➡️ 先抓取到所有推文來更新頁面
+             * 再逐個檢查使用者是否讚過推文來更新 ❤️ 狀態
+             * 避免讀取愛心的時間過長 */
             self.tweets = tweets
+            self.checkIfUserLikedTweets(tweets)
+        }
+    }
+    
+    func checkIfUserLikedTweets(_ tweets: [Tweet]) {
+        /* ⭐️ 利用 enumerated()
+         * 遍歷陣列的編號(index)與元件(tweet) 更新 cell ⭐️ */
+        for(index, tweet) in tweets.enumerated() {
+            TweetService.shared.checkIfLikedTweet(tweet) { didLike in
+                // didLike 預設是 false，也就不會更新 ❤️ 圖示
+                guard didLike == true else { return }
+                
+                self.tweets[index].didLike = true
+            }
         }
     }
     
@@ -139,5 +156,18 @@ extension FeedController: TweetCellDelegate {
         let nav = UINavigationController(rootViewController: controller)
         nav.modalPresentationStyle = .overFullScreen
         present(nav, animated: true)
+    }
+    
+    func handleLikeTapped(_ cell: TweetCell) {
+        guard let tweet = cell.tweet else { return }
+        
+        TweetService.shared.likeTweet(tweet: tweet) { (err, ref) in
+            /* ⭐️ 由於在 Cell 中的 tweet 設定成
+             * 每當 didSet 就會執行 configure() 刷新 cell 的 UI
+             * 所以此處只要賦值 cell.tweet 的任一個屬性，cell 便會自己更新 ⭐️ */
+            cell.tweet?.didLike.toggle()
+            let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
+            cell.tweet?.likes = likes
+        }
     }
 }

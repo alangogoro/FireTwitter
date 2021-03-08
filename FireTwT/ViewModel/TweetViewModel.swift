@@ -39,6 +39,15 @@ struct TweetViewModel {
         return title
     }
     
+    var likeButtonTintColor: UIColor {
+        return tweet.didLike ? .red : .lightGray
+    }
+    
+    var likeButtonImage: UIImage {
+        let imageName = tweet.didLike ? "like_filled" : "like"
+        return UIImage(named: imageName)!
+    }
+    
     /// Tweet 的發文時間距今有多久
     var timestamp: String {
         let formatter = DateComponentsFormatter()
