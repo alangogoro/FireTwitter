@@ -35,7 +35,7 @@ class TweetHeader: UICollectionReusableView {
          * ❗️ 但要宣告為 lazy var */
         let tap = UITapGestureRecognizer(target: self,
                                          action: #selector(handleProfileImageTapped))
-        // ➡️ 允歲 ImageView 接收互動事件
+        // ➡️ 允許 ImageView 接收互動事件
         iv.isUserInteractionEnabled = true
         iv.addGestureRecognizer(tap)
         
@@ -239,8 +239,11 @@ class TweetHeader: UICollectionReusableView {
         usernameLabel.text = viewModel.usernameText
         profileImageView.sd_setImage(with: viewModel.profileImageUrl)
         dateLabel.text = viewModel.headerTimestamp
+        
         retweetsLabel.attributedText = viewModel.retweetAttributedString
         likesLabel.attributedText = viewModel.likesAttributedString
+        likeButton.setImage(viewModel.likeButtonImage, for: .normal)
+        likeButton.tintColor = viewModel.likeButtonTintColor
     }
     
     func createButton(withImageName imageName: String) -> UIButton {
@@ -250,5 +253,4 @@ class TweetHeader: UICollectionReusableView {
         button.setDimensions(width: 20, height: 20)
         return button
     }
-    
 }

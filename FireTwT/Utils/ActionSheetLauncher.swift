@@ -89,7 +89,8 @@ class ActionSheetLauncher: NSObject {
         window.addSubview(tableView)
         let height = CGFloat(viewModel.options.count * 60) + 100
         tableView.frame = CGRect(x: 0, y: window.frame.height,
-                                 width: window.frame.width, height: height)
+                                 width: window.frame.width,
+                                 height: height)
         self.tableViewHeight = height
         
         /* ⭐️ 動畫呈現 ActionSheet ⭐️ */

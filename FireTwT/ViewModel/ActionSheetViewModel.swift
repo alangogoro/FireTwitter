@@ -16,6 +16,7 @@ struct ActionSheetViewModel {
         if user.isCurrentUser {
             results.append(.delete)
         } else {
+            // 根據追蹤情形，顯示 不再追蹤|開始追蹤 的選項
             let followOption: ActionSheetOption =
                 user.isFollowed ? .unfollow(user) : .follow(user)
             results.append(followOption)

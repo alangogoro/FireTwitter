@@ -37,7 +37,7 @@ class TweetCell: UICollectionViewCell {
          * ❗️ 但要宣告為 lazy var */
         let tap = UITapGestureRecognizer(target: self,
                                          action: #selector(handleProfileImageTapped))
-        // ➡️ 允歲 ImageView 接收互動事件
+        // ➡️ 允許 ImageView 接收互動事件
         iv.isUserInteractionEnabled = true
         iv.addGestureRecognizer(tap)
         

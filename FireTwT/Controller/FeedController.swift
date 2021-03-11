@@ -55,7 +55,7 @@ class FeedController: UICollectionViewController {
             TweetService.shared.checkIfLikedTweet(tweet) { didLike in
                 // didLike 預設是 false，也就不會更新 ❤️ 圖示
                 guard didLike == true else { return }
-                
+                // true 時，更新陣列也更新 cell
                 self.tweets[index].didLike = true
             }
         }
@@ -168,6 +168,11 @@ extension FeedController: TweetCellDelegate {
             cell.tweet?.didLike.toggle()
             let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
             cell.tweet?.likes = likes
+            
+            // 判斷只有對推文 ❤️ 時，才會發送通知；Unlike 則不會有通知
+            guard !tweet.didLike else { return }
+            NotificationService.shared
+                .uploadNotification(type: .like, tweet: tweet)
         }
     }
 }

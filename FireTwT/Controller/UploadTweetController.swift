@@ -12,7 +12,7 @@ class UploadTweetController: UIViewController {
     
     // MARK: - Properties
     private let user: User
-    private let config: UploadTweetConfiguration
+    private var config: UploadTweetConfiguration
     private lazy var viewModel = UploadTweetViewModel(config: config)
     
     /*    ❗️lazy var❗️
@@ -89,6 +89,13 @@ class UploadTweetController: UIViewController {
                 print("===== ⛔️ DEBUG: Failed to Upload tweet with error \(error.localizedDescription)")
                 return
             }
+            
+            /* ⭐️🔰 對於帶有參數的 enum 設 if 條件式 🔰⭐️ */
+            if case .reply(let tweet) = self.config {
+                NotificationService.shared.uploadNotification(type: .reply,
+                                                              tweet: tweet)
+            }
+            
             print("===== ✅ DEBUG: Upload tweet successful")
             self.dismiss(animated: true)
         }

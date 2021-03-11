@@ -63,6 +63,25 @@ struct TweetService {
         }
     }
     
+    /// 由 TweetID 抓取特定推特的內容
+    func fetchTweet(withTweetID tweetID: String,
+                    completion: @escaping (Tweet) -> ()) {
+        DB_REF.child("tweets")
+            .child(tweetID).observeSingleEvent(of: .value) { snapshot in
+            guard let dictionary = snapshot.value
+                    as? [String: Any] else { return }
+            guard let uid = dictionary["uid"]
+                    as? String else { return }
+            
+            UserService.shared.fetchUser(uid: uid) { user in
+                let tweet = Tweet(tweetID: tweetID,
+                                  user: user,
+                                  dictionary: dictionary)
+                completion(tweet)
+            }
+        }
+    }
+    
     func fetchTweets(forUser user: User,
                      completion: @escaping ([Tweet]) -> Void) {
         var tweets = [Tweet]()
@@ -73,20 +92,9 @@ struct TweetService {
             let tweetID = snapshot.key
             
             // ➡️ 從 Tweet ID 抓取推特的文章內容
-            DB_REF.child("tweets").child(tweetID)
-                .observeSingleEvent(of: .value) { snapshot in
-                guard let dictionary = snapshot.value
-                    as? [String: Any] else { return }
-                guard let uid = dictionary["uid"]
-                    as? String else { return }
-                
-                UserService.shared.fetchUser(uid: uid) { user in
-                    let tweet = Tweet(tweetID: tweetID,
-                                      user: user,
-                                      dictionary: dictionary)
-                    tweets.append(tweet)
-                    completion(tweets)
-                }
+            self.fetchTweet(withTweetID: tweetID) { tweet in
+                tweets.append(tweet)
+                completion(tweets)
             }
         }
     }

@@ -53,7 +53,8 @@ struct TweetViewModel {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.second, .minute, .hour, .day, .weekOfMonth]
         formatter.maximumUnitCount = 1
-        formatter.unitsStyle = .abbreviated
+        formatter.unitsStyle = .abbreviated // 精簡表示時間單位
+        
         let now = Date()
         return formatter.string(from: tweet.timestamp, to: now) ?? "0m"
     }
