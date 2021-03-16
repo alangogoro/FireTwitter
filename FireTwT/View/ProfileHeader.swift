@@ -10,6 +10,7 @@ import UIKit
 protocol ProfileHeaderDelegate: class {
     func handleDismissal()
     func handleEditProfileFollow(_ header: ProfileHeader)
+    func didSelectFilter(filter: ProfileFilterOptions)
 }
 
 
@@ -112,12 +113,6 @@ class ProfileHeader: UICollectionReusableView {
         return label
     }()
     
-    /// 跟隨使用者點選的標籤而橫向移動到該籤下部的藍色底線
-    private let underlineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .twitterBlue
-        return view
-    }()
     
     // MARK: - Lifecycle
     override init(frame: CGRect) {
@@ -169,9 +164,6 @@ class ProfileHeader: UICollectionReusableView {
                          height: 50)
         filterBar.delegate = self
         
-        addSubview(underlineView)
-        underlineView.anchor(left: leftAnchor, bottom: bottomAnchor,
-                             width: frame.width / 3, height: 2)
     }
     
     required init?(coder: NSCoder) {
@@ -215,23 +207,17 @@ class ProfileHeader: UICollectionReusableView {
 
 // MARK: - ProfileFilterViewDelegate
 extension ProfileHeader: ProfileFilterViewDelegate {
-    
     func filterView(_ filterView: ProfileFilterView,
-                    didSelect indexPath: IndexPath) {
-        /* ➡️ 先透過 protocol-delegate 的方式取得
-         * 標籤頁面中的 collectionView 被選取的 Cell
-         * 🔰 CollectionView.cellForItem(at: ) 🔰 */
-        guard let cell = filterView
-                .collectionView.cellForItem(at: indexPath)
-                as? ProfileFilterCell
+                    didSelect index: Int) {
+        
+        guard let filter =
+                ProfileFilterOptions(rawValue: index)
         else { return }
         
-        /* ⭐️ 再取得 Cell 的 X軸 座標，讓底下的 X軸 座標動畫移動 ⭐️ */
-        let xPosition = cell.frame.origin.x
-        UIView.animate(withDuration: 0.3) {
-            self.underlineView.frame.origin.x = xPosition
-        }
+        // ➡️ 傳達使用者選取的 filter 給 ProfileController
+        delegate?.didSelectFilter(filter: filter)
+        
+        // Filter 藍色底線動畫被移至 ProfileFilterView 的 UICollectionViewDelegate 中
     }
-    
 }
 
