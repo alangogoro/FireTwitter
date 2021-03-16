@@ -40,6 +40,13 @@ class TweetController: UICollectionViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.barStyle = .default
+    }
+    
+    
     // MARK: - Helpers
     func configureCollectionView() {
         collectionView.backgroundColor = .white

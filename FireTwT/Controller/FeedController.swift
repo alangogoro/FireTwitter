@@ -136,6 +136,7 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
         let textHeight = viewModel.measuredSize(forWidth: view.frame.width).height
         
         return CGSize(width: view.frame.width, height: textHeight + 72)
+        
     }
 }
 

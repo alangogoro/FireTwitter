@@ -17,7 +17,7 @@ struct TweetService {
                      completion: @escaping (Error?, DatabaseReference) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let values = ["uid": uid,/* ⭐️ NSDate().timeIntervalSince1970 以秒顯示的日期格式 ⭐️ */
+        var values = ["uid": uid,/* ⭐️ NSDate().timeIntervalSince1970 以秒顯示的日期格式 ⭐️ */
                       "timestamp": Int(NSDate().timeIntervalSince1970),
                       "likes": 0,
                       "retweets": 0,
@@ -39,10 +39,18 @@ struct TweetService {
             }
             
         case .reply(let tweet):
+            values["replyingTo"] = tweet.user.username
             
+            // ➡️ 更新特定 Tweet 回推的資料
             DB_REF.child("tweet-replies")
                 .child(tweet.tweetID).childByAutoId()
-                .updateChildValues(values, withCompletionBlock: completion)
+                .updateChildValues(values) { (err, ref) in
+                    // ➡️ 更新使用者曾經回推的資料
+                guard let replyKey = ref.key else { return }
+                DB_REF.child("user-replies")
+                    .child(uid).updateChildValues([tweet.tweetID: replyKey],
+                                                  withCompletionBlock: completion)
+            }
         }
     }
     
@@ -126,6 +134,42 @@ struct TweetService {
         }
     }
     
+    /// 查詢帳號曾經回推的推文
+    func fetchReplies(forUser user: User,
+                      completion: @escaping ([Tweet]) -> ()) {
+        /* 🚧 ========== 待完整解釋程式區塊 ========== 🚧 */
+        var replies = [Tweet]()
+        
+        DB_REF.child("user-replies") // 查詢 uid 下的所有回推
+            .child(user.uid).observe(.childAdded) { snapshot in
+            
+            let tweetKey = snapshot.key
+            guard let replyKey = snapshot.value
+                as? String else { return }
+            
+            DB_REF.child("tweet-replies") // 查詢 回推內容?
+                .child(tweetKey).child(replyKey)
+                .observeSingleEvent(of: .value) { snapshot in
+                
+                guard let dictionary = snapshot.value
+                    as? [String: Any] else { return }
+                guard let uid = dictionary["uid"]
+                    as? String else { return }
+                let replyID = snapshot.key
+                
+                UserService.shared
+                    .fetchUser(uid: uid) { user in
+                    let reply = Tweet(tweetID: replyID,
+                                      user: user,
+                                      dictionary: dictionary)
+                    replies.append(reply)
+                    completion(replies)
+                }
+            }
+        }
+        /* 🚧 ========== 待完整解釋程式區塊 ========== 🚧 */
+    }
+    
     func likeTweet(tweet: Tweet,
                    completion: @escaping (Error?, DatabaseReference) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -170,6 +214,25 @@ struct TweetService {
             // ⭐️ DataSnapshot.exist() returns a Bool ⭐️
             completion(snapshot.exists())
             
+        }
+    }
+    
+    func fetchLikedTweet(forUser user: User,
+                         completion: @escaping ([Tweet]) -> ()) {
+        var tweets = [Tweet]()
+        
+        DB_REF.child("user-likes")
+            .child(user.uid).observe(.childAdded) { snapshot in
+            // ➡️ 資料內容都存成 {TweetID: 1}，因此取得 Snapshot 的 Key 即可
+            let tweetID = snapshot.key
+            
+            self.fetchTweet(withTweetID: tweetID) { likedTweet in
+                var tweet = likedTweet
+                tweet.didLike = true
+                
+                tweets.append(tweet)
+                completion(tweets)
+            }
         }
     }
 }

@@ -14,10 +14,25 @@ class ProfileController: UICollectionViewController {
     
     // MARK: - Properties
     private var user: User
-    
-    private var tweets = [Tweet]() {
+       
+    /* ⭐️ 藉由 delegate 取得被使用者選取的 Filter(頁籤) ⭐️
+     * 再切換 TableView 的 dataSource */
+    private var selectedFilter: ProfileFilterOptions = .tweets {
         didSet { collectionView.reloadData() }
     }
+    // 3 個 Filter 各自的資料陣列
+    private var tweets = [Tweet]()
+    private var likedTweets = [Tweet]()
+    private var replies = [Tweet]()
+    // ➡️ Filter(頁籤) 的 TableView DataSource
+    private var currentDataSource: [Tweet] {
+        switch selectedFilter {
+        case .tweets: return tweets
+        case .replies: return replies
+        case .likes: return likedTweets
+        }
+    }
+    
     
     
     // MARK: - Lifecycle
@@ -34,7 +49,8 @@ class ProfileController: UICollectionViewController {
         super.viewDidLoad()
         configureCollectionView()
         fetchTweets()
-        //print("===== ☑️ DEBUG: User is \(user.username)")
+        fetchLikedTweets()
+        fetchReplies()
         checkIfFollowing()
         fetchUserStates()
     }
@@ -56,6 +72,18 @@ class ProfileController: UICollectionViewController {
         }
     }
     
+    func fetchLikedTweets() {
+        TweetService.shared.fetchLikedTweet(forUser: user) { tweets in
+            self.likedTweets = tweets
+        }
+    }
+    
+    func fetchReplies() {
+        TweetService.shared.fetchReplies(forUser: user) { tweets in
+            self.replies = tweets
+        }
+    }
+
     func checkIfFollowing() {
         UserService.shared.checkIfFollowing(uid: user.uid) { isFollowing in
             self.user.isFollowed = isFollowing
@@ -84,6 +112,11 @@ class ProfileController: UICollectionViewController {
                                 withReuseIdentifier: headerIdentifier)
         collectionView.register(TweetCell.self,
                                 forCellWithReuseIdentifier: reuseIdentifier)
+        
+        /* ⭐️ 先取得 TabBar 的高，再設定 CollectionView 的下緣內距 ⭐️ */
+        guard let tabHeight = tabBarController?.tabBar
+                .frame.height else { return }
+        collectionView.contentInset.bottom = tabHeight
     }
 }
 
@@ -94,7 +127,7 @@ extension ProfileController {
                                     UICollectionView,
                                  numberOfItemsInSection section: Int)
     -> Int {
-        return tweets.count
+        return currentDataSource.count
     }
     override func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath)
@@ -102,7 +135,7 @@ extension ProfileController {
         let cell = collectionView
             .dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
                                  for: indexPath) as! TweetCell
-        cell.tweet = tweets[indexPath.row]
+        cell.tweet = currentDataSource[indexPath.row]
         return cell
     }
 }
@@ -121,6 +154,12 @@ extension ProfileController {
         header.delegate = self
         return header
     }
+    
+    override func collectionView(_ collectionView: UICollectionView,
+                                 didSelectItemAt indexPath: IndexPath) {
+        let controller = TweetController(tweet: currentDataSource[indexPath.row])
+        navigationController?.pushViewController(controller, animated: true)
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLaout
@@ -136,12 +175,22 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath)
     -> CGSize {
-        return CGSize(width: view.frame.width, height: 120)
+        /* ➡️ 使 CollectionView Item 的大小（尺寸）
+         * 能依照 Tweet 的內容作變化 */
+        let viewModel = TweetViewModel(tweet: currentDataSource[indexPath.row])
+        var textHeight = viewModel.measuredSize(forWidth: view.frame.width).height + 72
+        
+        if currentDataSource[indexPath.row].isReply {
+            textHeight += 20
+        }
+        
+        return CGSize(width: view.frame.width, height: textHeight)
     }
 }
 
 // MARK: - ProfileHeaderDelegate
 extension ProfileController: ProfileHeaderDelegate {
+    
     func handleDismissal() {
         navigationController?.popViewController(animated: true)
     }
@@ -167,6 +216,9 @@ extension ProfileController: ProfileHeaderDelegate {
                                                               user: self.user)
             }
         }
-        
+    }
+    
+    func didSelectFilter(filter: ProfileFilterOptions) {
+        self.selectedFilter = filter
     }
 }
