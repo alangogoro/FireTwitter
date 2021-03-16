@@ -14,7 +14,11 @@ struct Tweet {
     let retweetCount: Int
     var timestamp: Date!
     var user: User
+    
     var didLike = false
+    
+    var replyingTo: String?
+    var isReply: Bool { return replyingTo != nil }
     
     init(tweetID: String, user: User, dictionary: [String: Any]) {
         self.tweetID = tweetID
@@ -27,6 +31,10 @@ struct Tweet {
             /* ➡️ 把從 Firebase Database 取得的時間戳記（1970 開始的秒數）
              * 轉換為 Swift 的日期類型以方便使用 */
             self.timestamp = Date(timeIntervalSince1970: timestamp)
+        }
+        
+        if let replyingTo = dictionary["replyingTo"] as? String {
+            self.replyingTo = replyingTo
         }
     }
 }

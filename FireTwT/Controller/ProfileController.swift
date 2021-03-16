@@ -154,6 +154,12 @@ extension ProfileController {
         header.delegate = self
         return header
     }
+    
+    override func collectionView(_ collectionView: UICollectionView,
+                                 didSelectItemAt indexPath: IndexPath) {
+        let controller = TweetController(tweet: currentDataSource[indexPath.row])
+        navigationController?.pushViewController(controller, animated: true)
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLaout
@@ -172,9 +178,13 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
         /* ➡️ 使 CollectionView Item 的大小（尺寸）
          * 能依照 Tweet 的內容作變化 */
         let viewModel = TweetViewModel(tweet: currentDataSource[indexPath.row])
-        let textHeight = viewModel.measuredSize(forWidth: view.frame.width).height
+        var textHeight = viewModel.measuredSize(forWidth: view.frame.width).height + 72
         
-        return CGSize(width: view.frame.width, height: textHeight + 72)
+        if currentDataSource[indexPath.row].isReply {
+            textHeight += 20
+        }
+        
+        return CGSize(width: view.frame.width, height: textHeight)
     }
 }
 

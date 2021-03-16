@@ -9,6 +9,7 @@ import UIKit
 
 struct TweetViewModel {
     
+    // MARK: - Properties
     let tweet: Tweet
     let user: User
     
@@ -72,6 +73,16 @@ struct TweetViewModel {
         return attributedString(withValue: tweet.likes, text: "Likes")
     }
     
+    var shouldHideReplyLabel: Bool {
+        return !tweet.isReply
+    }
+    var replyText: String? {
+        guard let replyingToUsername = tweet.replyingTo else { return nil }
+        return "→ replying to @\(replyingToUsername)"
+    }
+    
+    
+    // MARK: - Lifecycle
     init(tweet: Tweet) {
         self.tweet = tweet
         self.user = tweet.user
@@ -88,6 +99,7 @@ struct TweetViewModel {
         return attributedTitle
     }
     
+    // MARK: - Helpers
     /// 傳入螢幕寬度以計算出每條 Tweet Cell 所需要的尺寸
     func measuredSize(forWidth width: CGFloat) -> CGSize {
         let measureLabel = UILabel()

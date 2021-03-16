@@ -17,7 +17,7 @@ struct TweetService {
                      completion: @escaping (Error?, DatabaseReference) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let values = ["uid": uid,/* ⭐️ NSDate().timeIntervalSince1970 以秒顯示的日期格式 ⭐️ */
+        var values = ["uid": uid,/* ⭐️ NSDate().timeIntervalSince1970 以秒顯示的日期格式 ⭐️ */
                       "timestamp": Int(NSDate().timeIntervalSince1970),
                       "likes": 0,
                       "retweets": 0,
@@ -39,6 +39,8 @@ struct TweetService {
             }
             
         case .reply(let tweet):
+            values["replyingTo"] = tweet.user.username
+            
             // ➡️ 更新特定 Tweet 回推的資料
             DB_REF.child("tweet-replies")
                 .child(tweet.tweetID).childByAutoId()
@@ -153,13 +155,14 @@ struct TweetService {
                     as? [String: Any] else { return }
                 guard let uid = dictionary["uid"]
                     as? String else { return }
+                let replyID = snapshot.key
                 
                 UserService.shared
                     .fetchUser(uid: uid) { user in
-                    let tweet = Tweet(tweetID: tweetKey,
+                    let reply = Tweet(tweetID: replyID,
                                       user: user,
                                       dictionary: dictionary)
-                    replies.append(tweet)
+                    replies.append(reply)
                     completion(replies)
                 }
             }

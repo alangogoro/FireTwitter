@@ -44,11 +44,17 @@ class TweetCell: UICollectionViewCell {
         return iv
     }()
     
+    private let replyLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 12)
+        return label
+    }()
+    
     private let captionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.numberOfLines = 0
-        label.text = "Some test caption"
         return label
     }()
     
@@ -104,26 +110,40 @@ class TweetCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = .white
         
-        addSubview(profileImageView)
-        profileImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(8)
-            make.left.equalToSuperview().inset(8)
+        
+//        addSubview(profileImageView)
+//        profileImageView.snp.makeConstraints { make in
+//            make.top.equalToSuperview().inset(8)
+//            make.left.equalToSuperview().inset(8)
+//        }
+        
+        let captionStack = UIStackView(arrangedSubviews: [infoLabel,
+                                                          captionLabel])
+        captionStack.axis = .vertical
+        captionStack.distribution = .fillProportionally
+        captionStack.spacing = 4
+        
+        let stack = UIStackView(arrangedSubviews: [profileImageView,
+                                                   captionStack])
+        stack.distribution = .fillProportionally
+        stack.spacing = 12
+        stack.alignment = .leading
+        
+        let mutableStack = UIStackView(arrangedSubviews: [replyLabel,
+                                                          stack])
+        mutableStack.axis = .vertical
+        mutableStack.spacing = 8
+        mutableStack.distribution = .fillProportionally
+        
+        addSubview(mutableStack)
+        mutableStack.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(4)
+            make.left.right.equalToSuperview().inset(12)
         }
         
-        let stack = UIStackView(arrangedSubviews: [infoLabel,
-                                                   captionLabel])
-        stack.axis = .vertical
-        stack.distribution = .fillProportionally
-        stack.spacing = 4
-        addSubview(stack)
-        stack.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView)
-            make.left.equalTo(profileImageView.snp.right).offset(12)
-            make.right.equalToSuperview().inset(12)
-        }
+        replyLabel.isHidden = true
         
         infoLabel.font = UIFont.systemFont(ofSize: 14)
-        infoLabel.text = "Username @user"
         
         let actionStack = UIStackView(arrangedSubviews: [commentButton,
                                                          retweetButton,
@@ -184,5 +204,8 @@ class TweetCell: UICollectionViewCell {
         
         likeButton.tintColor = viewModel.likeButtonTintColor
         likeButton.setImage(viewModel.likeButtonImage, for: .normal)
+        
+        replyLabel.isHidden = viewModel.shouldHideReplyLabel
+        replyLabel.text = viewModel.replyText
     }
 }
