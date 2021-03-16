@@ -34,8 +34,8 @@ class NotificationCell: UITableViewCell {
         
         let tap = UITapGestureRecognizer(target: self,
                                          action: #selector(handleProfileImageTapped))
-        iv.addGestureRecognizer(tap)
         iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(tap)
         
         return iv
     }()
@@ -96,10 +96,12 @@ class NotificationCell: UITableViewCell {
     
     // MARK: - Selectors
     @objc func handleProfileImageTapped() {
+        print("======= 🔘 DEBUG: Handle ProfileImage tap..")
         delegate?.didTapProfileImage(self)
     }
     
     @objc func handelFollowTapped() {
+        print("======= 🔘 DEBUG: Handle follow tap..")
         delegate?.didTapFollow(self)
     }
     
