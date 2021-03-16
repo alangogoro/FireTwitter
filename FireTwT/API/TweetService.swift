@@ -54,17 +54,47 @@ struct TweetService {
         }
     }
     
+    /**
+     查詢所有推文
+     - Parameter completion: 追蹤中帳號，以及自己帳號的 **[Tweet]**
+     */
     func fetchTweets(completion: @escaping ([Tweet]) -> Void) {
         var tweets = [Tweet]()
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
         
-        DB_REF.child("tweets")
+        DB_REF.child("user-following") // ➡️ 查詢 追蹤中的帳號
+            .child(currentUid).observe(.childAdded) { snapshot in
+            let followingUid = snapshot.key
+            DB_REF.child("user-tweets") // ➡️ 查詢追蹤帳號的 推文ID
+                .child(followingUid).observe(.childAdded) { snapshot in
+                let tweetID = snapshot.key
+                self.fetchTweet(withTweetID: tweetID) { tweet in // ➡️ 依照 推文ID 查詢其內容
+                    tweets.append(tweet)
+                    completion(tweets)
+                }
+            }
+        }
+        DB_REF.child("user-tweets") // ➡️ 查詢自己的 推文ID
+            .child(currentUid).observe(.childAdded) { snapshot in
+            let tweetID = snapshot.key
+            self.fetchTweet(withTweetID: tweetID) { tweet in     // ➡️ 依照 推文ID 查詢其內容
+                tweets.append(tweet)
+                completion(tweets)
+            }
+        }
+    }
+    
+    func fetchTweets(forUser user: User,
+                     completion: @escaping ([Tweet]) -> Void) {
+        var tweets = [Tweet]()
+        
+        DB_REF.child("user-tweets").child(user.uid)
             .observe(.childAdded) { snapshot in
-            guard let dictionary = snapshot.value as? [String: Any] else { return }
-            guard let uid = dictionary["uid"] as? String else { return }
+            // ➡️ 取得 Tweet 的 ID
             let tweetID = snapshot.key
             
-            UserService.shared.fetchUser(uid: uid) { user in
-                let tweet = Tweet(tweetID: tweetID, user: user, dictionary: dictionary)
+            // ➡️ 從 Tweet ID 抓取推特的文章內容
+            self.fetchTweet(withTweetID: tweetID) { tweet in
                 tweets.append(tweet)
                 completion(tweets)
             }
@@ -86,23 +116,6 @@ struct TweetService {
                                   user: user,
                                   dictionary: dictionary)
                 completion(tweet)
-            }
-        }
-    }
-    
-    func fetchTweets(forUser user: User,
-                     completion: @escaping ([Tweet]) -> Void) {
-        var tweets = [Tweet]()
-        
-        DB_REF.child("user-tweets").child(user.uid)
-            .observe(.childAdded) { snapshot in
-            // ➡️ 取得 Tweet 的 ID
-            let tweetID = snapshot.key
-            
-            // ➡️ 從 Tweet ID 抓取推特的文章內容
-            self.fetchTweet(withTweetID: tweetID) { tweet in
-                tweets.append(tweet)
-                completion(tweets)
             }
         }
     }

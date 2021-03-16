@@ -37,26 +37,47 @@ class FeedController: UICollectionViewController {
         navigationController?.navigationBar.isHidden = false
     }
     
+    
+    // MARK: - Selectors
+    @objc func handleRefresh() {
+        fetchTweets()
+    }
+    
     // MARK: - API
     func fetchTweets() {
+        collectionView.refreshControl?.beginRefreshing()
+        
         TweetService.shared.fetchTweets { tweets in
+            /* 🔰 針對 Tweet 做時間戳記排序 🔰 */
+            self.tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
+            
             /* ➡️ 先抓取到所有推文來更新頁面
              * 再逐個檢查使用者是否讚過推文來更新 ❤️ 狀態
              * 避免讀取愛心的時間過長 */
-            self.tweets = tweets
-            self.checkIfUserLikedTweets(tweets)
+            self.checkIfUserLikedTweets()
+            
+            self.collectionView.refreshControl?.endRefreshing()
         }
     }
     
-    func checkIfUserLikedTweets(_ tweets: [Tweet]) {
-        /* ⭐️ 利用 enumerated()
-         * 遍歷陣列的編號(index)與元件(tweet) 更新 cell ⭐️ */
-        for(index, tweet) in tweets.enumerated() {
+    func checkIfUserLikedTweets() {
+        self.tweets.forEach { tweet in
             TweetService.shared.checkIfLikedTweet(tweet) { didLike in
                 // didLike 預設是 false，也就不會更新 ❤️ 圖示
                 guard didLike == true else { return }
-                // true 時，更新陣列也更新 cell
-                self.tweets[index].didLike = true
+                
+                /* ➡️ 當 forEach 迴圈中的 tweet.didLike
+                 * 值為 true 時，
+                 * 利用具有唯一識別性的 TweetID 在本頁的 tweets 屬性
+                 * 中尋找 ID 相符的元素（firstIndex(where: )）
+                 * 並將對該元素的 didLike 屬性改為 true。
+                 * ⚠️❗️此處理是因為本頁有 RefreshControl，一旦原陣列更新
+                 * 在執行 checkIfUserLikedTweets 時，就可能因為
+                 * 新舊陣列 mismatch 從而導致 index out of range 錯誤 ⚠️❗️ */
+                if let index = self.tweets
+                    .firstIndex(where: { $0.tweetID == tweet.tweetID }) {
+                    self.tweets[index].didLike = true
+                }
             }
         }
     }
@@ -75,6 +96,11 @@ class FeedController: UICollectionViewController {
         titleView.setDimensions(width: 44, height: 44)
         navigationItem.titleView = titleView
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self,
+                                 action: #selector(handleRefresh),
+                                 for: .valueChanged)
+        collectionView.refreshControl = refreshControl
     }
     
     func configureLeftBarButton() {
