@@ -70,7 +70,7 @@ class FeedController: UICollectionViewController {
                  * 值為 true 時，
                  * 利用具有唯一識別性的 TweetID 在本頁的 tweets 屬性
                  * 中尋找 ID 相符的元素（firstIndex(where: )）
-                 * 並將對該元素的 didLike 屬性改為 true。
+                 * 並將該元素的 didLike 屬性改為 true。
                  * ⚠️❗️此處理是因為本頁有 RefreshControl，一旦原陣列更新
                  * 在執行 checkIfUserLikedTweets 時，就可能因為
                  * 新舊陣列 mismatch 從而導致 index out of range 錯誤 ⚠️❗️ */
