@@ -57,7 +57,7 @@ class UploadTweetController: UIViewController {
         return iv
     }()
     
-    private let captionTextView = CaptionTextView()
+    private let captionTextView = InputTextView()
     
     // MARK: - Lifecycle
     /* ⭐️ 自定義建構式，需傳入 User 物件才能生成頁面 ⭐️ */
