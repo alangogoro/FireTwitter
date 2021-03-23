@@ -141,13 +141,12 @@ extension FeedController {
     
     override func collectionView(_ collectionView: UICollectionView,
                                  didSelectItemAt indexPath: IndexPath) {
-        // ➡️ 生成 FlowLayout 的 CollectionView 頁面
         let controller = TweetController(tweet: tweets[indexPath.row])
         navigationController?.pushViewController(controller, animated: true)
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
+// MARK: - CollectionViewDelegateFlowLayout
 /* ❗️⭐️ 遵從 CollectionViewDelegateFlowLayout 來自訂
  * item 的大小、間隔 ⭐️❗️ */
 extension FeedController: UICollectionViewDelegateFlowLayout {
@@ -173,6 +172,13 @@ extension FeedController: TweetCellDelegate {
         
         let controller = ProfileController(user: user)
         navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func handleFetchUser(withUsername username: String) {
+        UserService.shared.fetchUser(withUsername: username) { user in
+            let controller = ProfileController(user: user)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     func handleReplyTapped(_ cell: TweetCell) {

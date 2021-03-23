@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import ActiveLabel
 
 class UploadTweetController: UIViewController {
     
@@ -38,12 +39,14 @@ class UploadTweetController: UIViewController {
         return button
     }()
     
-    private lazy var replyLabel: UILabel = {
-        let label = UILabel()
+    private lazy var replyLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .lightGray
-        label.text = "Replying to @username"
-        label.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        // ➡️ ActiveLabel 的提及顏色
+        label.mentionColor = .twitterBlue
+        label.widthAnchor
+            .constraint(equalToConstant: view.frame.width).isActive = true
         return label
     }()
     
@@ -57,7 +60,7 @@ class UploadTweetController: UIViewController {
         return iv
     }()
     
-    private let captionTextView = CaptionTextView()
+    private let captionTextView = InputTextView()
     
     // MARK: - Lifecycle
     /* ⭐️ 自定義建構式，需傳入 User 物件才能生成頁面 ⭐️ */
@@ -74,6 +77,7 @@ class UploadTweetController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configureMentionHandler()
     }
     
     // MARK: - Selectors
@@ -148,5 +152,12 @@ class UploadTweetController: UIViewController {
                             action: #selector(handleCancel))
         navigationItem.rightBarButtonItem =
             UIBarButtonItem(customView: actionButton)
+    }
+    
+    func configureMentionHandler() {
+        // ➡️ 設定 ActionLabel 的點擊事件
+        replyLabel.handleMentionTap { mention in
+            print("======= 🔘 DEBUG: Mentioned user is \(mention)")
+        }
     }
 }

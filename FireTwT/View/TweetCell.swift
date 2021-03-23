@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import ActiveLabel
 
 /* ➡️ 當按下 Cell 的大頭貼，需要呼叫代理 FeedController
  * 其中的 NavigationController 去 push 出該帳號的個人資料頁 */
@@ -14,6 +15,7 @@ protocol TweetCellDelegate: class {
     func handleProfileImageTapped(_ cell: TweetCell)
     func handleReplyTapped(_ cell: TweetCell)
     func handleLikeTapped(_ cell: TweetCell)
+    func handleFetchUser(withUsername username: String)
 }
 
 class TweetCell: UICollectionViewCell {
@@ -44,17 +46,21 @@ class TweetCell: UICollectionViewCell {
         return iv
     }()
     
-    private let replyLabel: UILabel = {
-        let label = UILabel()
+    private let replyLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.textColor = .lightGray
+        label.mentionColor = .twitterBlue
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
     
-    private let captionLabel: UILabel = {
-        let label = UILabel()
+    private let captionLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.numberOfLines = 0
+        // ➡️ 設定 ActionLabel 文字顏色
+        label.mentionColor = .twitterBlue
+        label.hashtagColor = .twitterBlue
         return label
     }()
     
@@ -110,13 +116,6 @@ class TweetCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = .white
         
-        
-//        addSubview(profileImageView)
-//        profileImageView.snp.makeConstraints { make in
-//            make.top.equalToSuperview().inset(8)
-//            make.left.equalToSuperview().inset(8)
-//        }
-        
         let captionStack = UIStackView(arrangedSubviews: [infoLabel,
                                                           captionLabel])
         captionStack.axis = .vertical
@@ -165,6 +164,7 @@ class TweetCell: UICollectionViewCell {
             make.height.equalTo(1)
         }
         
+        configureMentionHandler()
     }
     
     required init?(coder: NSCoder) {
@@ -207,5 +207,11 @@ class TweetCell: UICollectionViewCell {
         
         replyLabel.isHidden = viewModel.shouldHideReplyLabel
         replyLabel.text = viewModel.replyText
+    }
+    
+    func configureMentionHandler() {
+        captionLabel.handleMentionTap { username in
+            self.delegate?.handleFetchUser(withUsername: username)
+        }
     }
 }

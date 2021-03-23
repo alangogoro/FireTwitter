@@ -10,7 +10,7 @@ import UIKit
 /**
  一個包含灰色提示文字的 TextView
  */
-class CaptionTextView: UITextView {
+class InputTextView: UITextView {
     
     // MARK: - Property
     let placeholderLabel: UILabel = {

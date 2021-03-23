@@ -34,7 +34,6 @@ class ProfileController: UICollectionViewController {
     }
     
     
-    
     // MARK: - Lifecycle
     init(user: User) {
         self.user = user
@@ -68,7 +67,7 @@ class ProfileController: UICollectionViewController {
     func fetchTweets() {
         TweetService.shared.fetchTweets(forUser: user) { tweets in
             self.tweets = tweets
-            print("===== ✅ DEBUG: Completed fetch tweets..")
+            //print("===== ✅ DEBUG: Completed fetch tweets..")
         }
     }
     
@@ -98,7 +97,6 @@ class ProfileController: UICollectionViewController {
         }
     }
     
-    
     // MARK: - Helpers
     func configureCollectionView() {
         collectionView.backgroundColor = .white
@@ -121,7 +119,7 @@ class ProfileController: UICollectionViewController {
 }
 
 
-// MARK: - UICollectionViewDataSource
+// MARK: - CollectionViewDataSource
 extension ProfileController {
     override func collectionView(_ collectionView:
                                     UICollectionView,
@@ -140,7 +138,7 @@ extension ProfileController {
     }
 }
 
-// MARK: - UICollectionViewDelegate
+// MARK: - CollectionViewDelegate
 extension ProfileController {
     override func collectionView(_ collectionView: UICollectionView,
                                  viewForSupplementaryElementOfKind kind: String,
@@ -162,8 +160,9 @@ extension ProfileController {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLaout
+// MARK: - CollectionViewDelegateFlowLaout
 extension ProfileController: UICollectionViewDelegateFlowLayout {
+    /* ➡️ 設定 Header 的尺寸 */
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int)
@@ -190,15 +189,21 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - ProfileHeaderDelegate
 extension ProfileController: ProfileHeaderDelegate {
-    
     func handleDismissal() {
         navigationController?.popViewController(animated: true)
     }
     
     func handleEditProfileFollow(_ header: ProfileHeader) {
-        
-        if user.isCurrentUser { return }
-        
+        // 使用者自己的帳號 -> 修改個人資料
+        if user.isCurrentUser {
+            let controller = EditProfileController(user: user)
+            controller.delegate = self
+            let nav = UINavigationController(rootViewController: controller)
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: true, completion: nil)
+            return
+        }
+        // 追蹤中的帳號 -> 取消追蹤
         if user.isFollowed {
             UserService.shared.unfollowUser(uid: user.uid) { (err, ref) in
                 print("===== ✅ DEBUG: Did unfollowed user..")
@@ -206,6 +211,7 @@ extension ProfileController: ProfileHeaderDelegate {
                 self.collectionView.reloadData()
             }
         } else {
+            // 未追蹤帳號 -> 開始追蹤
             UserService.shared.followUser(uid: user.uid) { (ref, err) in
                 print("===== ✅ DEBUG: Followed user..")
                 self.user.isFollowed = true
@@ -217,8 +223,18 @@ extension ProfileController: ProfileHeaderDelegate {
             }
         }
     }
-    
+    // 得知使用者點選的頁籤並重整頁面佈局
     func didSelectFilter(filter: ProfileFilterOptions) {
         self.selectedFilter = filter
+    }
+}
+
+// MARK: - EditProfileControllerDelegate
+extension ProfileController: EditProfileControllerDelegate {
+    func controller(_ controller: EditProfileController,
+                    wantsToUpdate user: User) {
+        controller.dismiss(animated: true, completion: nil)
+        self.user = user
+        self.collectionView.reloadData()
     }
 }
