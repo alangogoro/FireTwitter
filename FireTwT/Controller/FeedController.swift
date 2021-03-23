@@ -205,7 +205,9 @@ extension FeedController: TweetCellDelegate {
             // 判斷只有對推文 ❤️ 時，才會發送通知；Unlike 則不會有通知
             guard !tweet.didLike else { return }
             NotificationService.shared
-                .uploadNotification(type: .like, tweet: tweet)
+                .uploadNotification(toUser: tweet.user,
+                                    type: .like,
+                                    tweetID: tweet.tweetID)
         }
     }
 }

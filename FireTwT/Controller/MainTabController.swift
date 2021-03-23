@@ -59,14 +59,6 @@ class MainTabController: UITabBarController {
         }
     }
     
-    func logUserOut() {
-        do {
-            try Auth.auth().signOut()
-        } catch let error {
-            print("===== ⛔️ DEBUG: Failed to Sign out with error \(error.localizedDescription)")
-        }
-    }
-    
     func fetchUser() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         UserService.shared.fetchUser(uid: uid) { user in

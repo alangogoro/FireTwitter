@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 private let reuseIdentifier = "TweetCell"
 private let headerIdentifier = "ProfileHeader"
@@ -167,7 +168,12 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int)
     -> CGSize {
-        return CGSize(width: view.frame.width, height: 350)
+        var height: CGFloat = 300
+        if user.bio != nil {
+            height += 40
+        }
+        
+        return CGSize(width: view.frame.width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -215,11 +221,11 @@ extension ProfileController: ProfileHeaderDelegate {
             UserService.shared.followUser(uid: user.uid) { (ref, err) in
                 print("===== ✅ DEBUG: Followed user..")
                 self.user.isFollowed = true
-                header.editProfileFollowButton.setTitle("Following", for: .normal)
                 self.collectionView.reloadData()
                 
-                NotificationService.shared.uploadNotification(type: .follow,
-                                                              user: self.user)
+                // 傳送通知
+                NotificationService.shared.uploadNotification(toUser: self.user,
+                                                              type: .follow)
             }
         }
     }
@@ -236,5 +242,17 @@ extension ProfileController: EditProfileControllerDelegate {
         controller.dismiss(animated: true, completion: nil)
         self.user = user
         self.collectionView.reloadData()
+    }
+    
+    func handleLogout() {
+        do {
+            try Auth.auth().signOut()
+            print("===== ✅ DEBUG: Did log User Out")
+            let nav = UINavigationController(rootViewController: LoginController())
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+        } catch let error {
+            print("===== ⛔️ DEBUG: Failed to Sign out with error \(error.localizedDescription)")
+        }
     }
 }
