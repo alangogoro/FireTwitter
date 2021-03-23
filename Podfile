@@ -11,8 +11,8 @@ target 'FireTwT' do
 	pod 'Firebase/Storage'
 	pod 'Firebase/Auth'
   
-  pod 'SnapKit', '~> 5.0.0'
-  
+  pod 'SnapKit', '~> 5.0.0'  
   pod 'SDWebImage', '~> 5.0'
+  pod 'ActiveLabel'
 
 end

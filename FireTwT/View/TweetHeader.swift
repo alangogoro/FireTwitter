@@ -7,9 +7,11 @@
 
 import UIKit
 import SnapKit
+import ActiveLabel
 
 protocol TweetHeaderDelegate: class {
     func showActionSheet()
+    func handleFetchUser(withUsername username: String)
 }
 
 /* ⭐️🔰 CollectionReusableView 🔰⭐️
@@ -57,10 +59,11 @@ class TweetHeader: UICollectionReusableView {
         return label
     }()
     
-    private let captionLabel: UILabel = {
-        let label = UILabel()
+    private let captionLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.font = UIFont.systemFont(ofSize: 20)
         label.numberOfLines = 0
+        label.mentionColor = .twitterBlue
         label.text = "Some caption text or string will be shown in this blank beautiful area"
         return label
     }()
@@ -82,9 +85,10 @@ class TweetHeader: UICollectionReusableView {
         return button
     }()
     
-    private let replyLabel: UILabel = {
-        let label = UILabel()
+    private let replyLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.textColor = .lightGray
+        label.mentionColor = .twitterBlue
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
@@ -211,6 +215,8 @@ class TweetHeader: UICollectionReusableView {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(statsView.snp.bottom).offset(16)
         }
+        
+        configureMentionHandler()
     }
     
     required init?(coder: NSCoder) {
@@ -261,6 +267,12 @@ class TweetHeader: UICollectionReusableView {
         
         replyLabel.isHidden = viewModel.shouldHideReplyLabel
         replyLabel.text = viewModel.replyText
+    }
+    
+    func configureMentionHandler() {
+        captionLabel.handleMentionTap { username in
+            self.delegate?.handleFetchUser(withUsername: username)
+        }
     }
     
     func createButton(withImageName imageName: String) -> UIButton {

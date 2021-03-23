@@ -100,7 +100,6 @@ extension TweetController {
                                  viewForSupplementaryElementOfKind kind: String,
                                  at indexPath: IndexPath)
     -> UICollectionReusableView {
-        
         let header = collectionView
             .dequeueReusableSupplementaryView(ofKind: kind,
                                               withReuseIdentifier: headerIdentifier,
@@ -108,7 +107,6 @@ extension TweetController {
         header.tweet = tweet
         header.delegate = self
         return header
-        
     }
 }
 
@@ -157,11 +155,17 @@ extension TweetController: TweetHeaderDelegate {
             }
         }
     }
+    
+    func handleFetchUser(withUsername username: String) {
+        UserService.shared.fetchUser(withUsername: username) { user in
+            let controller = ProfileController(user: user)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+    }
 }
 
 // MARK: - ActionSheetLauncherDelegate
 extension TweetController: ActionSheetLauncherDelegate {
-    
     func didSelect(option: ActionSheetOption) {
         switch option {
         case .follow(let user):
@@ -178,5 +182,4 @@ extension TweetController: ActionSheetLauncherDelegate {
             print("===== 🔘 DEBUG: Delete tweet..")
         }
     }
-    
 }

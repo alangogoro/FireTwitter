@@ -21,6 +21,7 @@ enum EditProfileOptions: Int, CaseIterable {
     }
 }
 
+
 struct EditProfileViewModel {
     
     private let user: User

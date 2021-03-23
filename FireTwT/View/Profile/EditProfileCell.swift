@@ -30,8 +30,8 @@ class EditProfileCell: UITableViewCell {
     lazy var infoTextField: UITextField = {
         let tf = UITextField()
         tf.font = UIFont.systemFont(ofSize: 14)
-        tf.textAlignment = .left
         tf.textColor = .twitterBlue
+        tf.textAlignment = .left
         // 設定 TextField 的邊框
         tf.borderStyle = .none
         /* 🔰 設定 TextField Action 🔰

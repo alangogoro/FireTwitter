@@ -37,15 +37,14 @@ struct TweetService {
                     .updateChildValues([tweetID: 1],
                                        withCompletionBlock: completion)
             }
-            
         case .reply(let tweet):
             values["replyingTo"] = tweet.user.username
             
-            // ➡️ 更新特定 Tweet 回推的資料
+            // ➡️ 更新特定 Tweet 的回文資料
             DB_REF.child("tweet-replies")
                 .child(tweet.tweetID).childByAutoId()
                 .updateChildValues(values) { (err, ref) in
-                    // ➡️ 更新使用者曾經回推的資料
+                // ➡️ 更新使用者曾經回文的列表
                 guard let replyKey = ref.key else { return }
                 DB_REF.child("user-replies")
                     .child(uid).updateChildValues([tweet.tweetID: replyKey],
@@ -84,16 +83,17 @@ struct TweetService {
         }
     }
     
+    /// 查詢特定使用者的推文 **[Tweet]**
     func fetchTweets(forUser user: User,
                      completion: @escaping ([Tweet]) -> Void) {
         var tweets = [Tweet]()
         
-        DB_REF.child("user-tweets").child(user.uid)
-            .observe(.childAdded) { snapshot in
+        DB_REF.child("user-tweets")
+            .child(user.uid).observe(.childAdded) { snapshot in
             // ➡️ 取得 Tweet 的 ID
             let tweetID = snapshot.key
             
-            // ➡️ 從 Tweet ID 抓取推特的文章內容
+            // ➡️ 從 Tweet ID 抓取推特的內容
             self.fetchTweet(withTweetID: tweetID) { tweet in
                 tweets.append(tweet)
                 completion(tweets)
@@ -101,7 +101,7 @@ struct TweetService {
         }
     }
     
-    /// 由 TweetID 抓取特定推特的內容
+    /// 由 TweetID 查詢特定推特的內容
     func fetchTweet(withTweetID tweetID: String,
                     completion: @escaping (Tweet) -> ()) {
         DB_REF.child("tweets")
@@ -120,7 +120,7 @@ struct TweetService {
         }
     }
     
-    /// 查詢 Tweet 回推
+    /// 查詢特定 TweetID 的回文
     func fetchReplies(forTweet tweet: Tweet,
                       completion: @escaping ([Tweet]) -> ()) {
         var replies = [Tweet]()
@@ -224,12 +224,15 @@ struct TweetService {
         DB_REF.child("user-likes")
             .child(uid).child(tweet.tweetID)
             .observeSingleEvent(of: .value) { snapshot in
-            // ⭐️ DataSnapshot.exist() returns a Bool ⭐️
+            // ⭐️ DataSnapshot.exist() 將回傳 Bool ⭐️
             completion(snapshot.exists())
             
         }
     }
     
+    /** 查詢使用者 ❤️ 的推文 **[Tweet]**
+     - Parameters completion: 回傳的陣列 didLike 皆設為`true`
+     */
     func fetchLikedTweet(forUser user: User,
                          completion: @escaping ([Tweet]) -> ()) {
         var tweets = [Tweet]()

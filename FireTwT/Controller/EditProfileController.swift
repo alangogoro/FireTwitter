@@ -33,6 +33,7 @@ class EditProfileController: UITableViewController {
         return selectedImage != nil
     }
     
+    
     // MARK: - Liftcycle
     init(user: User) {
         self.user = user
@@ -51,6 +52,7 @@ class EditProfileController: UITableViewController {
         
         configureImagePicker()
     }
+    
     
     // MARK: - Selectors
     @objc func handleCancel() {
