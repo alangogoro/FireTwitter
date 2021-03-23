@@ -9,9 +9,9 @@ import UIKit
 import SnapKit
 import ActiveLabel
 
-/* ➡️ 當按下 Cell 的大頭貼，需要呼叫代理 FeedController
- * 其中的 NavigationController 去 push 出該帳號的個人資料頁 */
 protocol TweetCellDelegate: class {
+    // ➡️ 當按下 Cell 的大頭貼，需要呼叫代理 FeedController
+    // 其中的 NavigationController 去 push 出該帳號的個人資料頁
     func handleProfileImageTapped(_ cell: TweetCell)
     func handleReplyTapped(_ cell: TweetCell)
     func handleLikeTapped(_ cell: TweetCell)

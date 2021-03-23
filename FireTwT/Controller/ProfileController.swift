@@ -25,7 +25,7 @@ class ProfileController: UICollectionViewController {
     private var tweets = [Tweet]()
     private var likedTweets = [Tweet]()
     private var replies = [Tweet]()
-    // ➡️ Filter(頁籤) 的 TableView DataSource
+    // ➡️ Filter（頁籤） 的 TableView DataSource
     private var currentDataSource: [Tweet] {
         switch selectedFilter {
         case .tweets: return tweets
@@ -60,8 +60,6 @@ class ProfileController: UICollectionViewController {
         navigationController?.navigationBar.isHidden = true
         navigationController?.navigationBar.barStyle = .black
     }
-    
-    // MARK: - Selectors
     
     
     // MARK: - API

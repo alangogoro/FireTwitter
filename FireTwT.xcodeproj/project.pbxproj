@@ -15,7 +15,7 @@
 		CE2A4CE025AEC95800FB7057 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE2A4CDE25AEC95800FB7057 /* LaunchScreen.storyboard */; };
 		CE2A4CF225AECB4100FB7057 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CF125AECB4100FB7057 /* MainTabController.swift */; };
 		CE2A4CF525AED46300FB7057 /* FeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CF425AED46300FB7057 /* FeedController.swift */; };
-		CE2A4CF825AED49F00FB7057 /* ExploreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CF725AED49F00FB7057 /* ExploreController.swift */; };
+		CE2A4CF825AED49F00FB7057 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CF725AED49F00FB7057 /* SearchController.swift */; };
 		CE2A4CFB25AED4E200FB7057 /* NotificationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CFA25AED4E200FB7057 /* NotificationsController.swift */; };
 		CE2A4CFE25AED52900FB7057 /* ConversationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4CFD25AED52900FB7057 /* ConversationsController.swift */; };
 		CE2A4D0425AEF84E00FB7057 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2A4D0325AEF84E00FB7057 /* Extensions.swift */; };
@@ -32,7 +32,7 @@
 		CEB8872125EF8E4600D335BE /* ActionSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB8872025EF8E4600D335BE /* ActionSheetCell.swift */; };
 		CEB8872425F0BED900D335BE /* ActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB8872325F0BED900D335BE /* ActionSheetViewModel.swift */; };
 		CEB8876125F6189900D335BE /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB8876025F6189900D335BE /* Notification.swift */; };
-		CEB8876425F8B12500D335BE /* NitificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB8876325F8B12500D335BE /* NitificationService.swift */; };
+		CEB8876425F8B12500D335BE /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB8876325F8B12500D335BE /* NotificationService.swift */; };
 		CEB8877A25F8C8B400D335BE /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB8877925F8C8B400D335BE /* NotificationCell.swift */; };
 		CEB8877D25F9BFBF00D335BE /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB8877C25F9BFBF00D335BE /* NotificationViewModel.swift */; };
 		CED2D35825C16009001E76D9 /* TweetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED2D35725C16009001E76D9 /* TweetViewModel.swift */; };
@@ -69,7 +69,7 @@
 		CE2A4CE125AEC95800FB7057 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE2A4CF125AECB4100FB7057 /* MainTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
 		CE2A4CF425AED46300FB7057 /* FeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedController.swift; sourceTree = "<group>"; };
-		CE2A4CF725AED49F00FB7057 /* ExploreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreController.swift; sourceTree = "<group>"; };
+		CE2A4CF725AED49F00FB7057 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		CE2A4CFA25AED4E200FB7057 /* NotificationsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsController.swift; sourceTree = "<group>"; };
 		CE2A4CFD25AED52900FB7057 /* ConversationsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsController.swift; sourceTree = "<group>"; };
 		CE2A4D0325AEF84E00FB7057 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 		CEB8872025EF8E4600D335BE /* ActionSheetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetCell.swift; sourceTree = "<group>"; };
 		CEB8872325F0BED900D335BE /* ActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetViewModel.swift; sourceTree = "<group>"; };
 		CEB8876025F6189900D335BE /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
-		CEB8876325F8B12500D335BE /* NitificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NitificationService.swift; sourceTree = "<group>"; };
+		CEB8876325F8B12500D335BE /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		CEB8877925F8C8B400D335BE /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
 		CEB8877C25F9BFBF00D335BE /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		CED2D35725C16009001E76D9 /* TweetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetViewModel.swift; sourceTree = "<group>"; };
@@ -204,7 +204,7 @@
 				CEFAED2F25B57CA000C9FD71 /* AuthService.swift */,
 				CEFAED3225B9311600C9FD71 /* UserServive.swift */,
 				CEF5025F25BE9E3B0053034C /* TweetService.swift */,
-				CEB8876325F8B12500D335BE /* NitificationService.swift */,
+				CEB8876325F8B12500D335BE /* NotificationService.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -215,7 +215,7 @@
 				CEE9828125AFE3C40074B3AD /* Authentication */,
 				CE2A4CF125AECB4100FB7057 /* MainTabController.swift */,
 				CE2A4CF425AED46300FB7057 /* FeedController.swift */,
-				CE2A4CF725AED49F00FB7057 /* ExploreController.swift */,
+				CE2A4CF725AED49F00FB7057 /* SearchController.swift */,
 				CE2A4CFA25AED4E200FB7057 /* NotificationsController.swift */,
 				CE2A4CFD25AED52900FB7057 /* ConversationsController.swift */,
 				CEF5024625BAC3D60053034C /* UploadTweetController.swift */,
@@ -415,7 +415,7 @@
 				CEF5024725BAC3D60053034C /* UploadTweetController.swift in Sources */,
 				CEFAED3625B956BF00C9FD71 /* User.swift in Sources */,
 				CEEBADDE2603541B00DBFC4A /* EditProfileHeader.swift in Sources */,
-				CE2A4CF825AED49F00FB7057 /* ExploreController.swift in Sources */,
+				CE2A4CF825AED49F00FB7057 /* SearchController.swift in Sources */,
 				CE2A4CF225AECB4100FB7057 /* MainTabController.swift in Sources */,
 				CEE9828725AFE48D0074B3AD /* RegistrationController.swift in Sources */,
 				CE2AE53B25E38AE4005FC1C3 /* TweetHeader.swift in Sources */,
@@ -429,7 +429,7 @@
 				CE856AC925C93F12000C684F /* ProfileFilterView.swift in Sources */,
 				CEFAED3325B9311600C9FD71 /* UserServive.swift in Sources */,
 				CE2AE54225E8F4FD005FC1C3 /* ActionSheetLauncher.swift in Sources */,
-				CEB8876425F8B12500D335BE /* NitificationService.swift in Sources */,
+				CEB8876425F8B12500D335BE /* NotificationService.swift in Sources */,
 				CEF5026425BEBD6E0053034C /* Tweet.swift in Sources */,
 				CEF5026025BE9E3B0053034C /* TweetService.swift in Sources */,
 			);
