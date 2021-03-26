@@ -7,12 +7,12 @@
 
 import UIKit
 
-
 private let reuseIdentifier = "EditProfileCell"
 
 protocol EditProfileControllerDelegate: class {
     func controller(_ controller: EditProfileController,
                     wantsToUpdate user: User)
+    func handleLogout()
 }
 
 class EditProfileController: UITableViewController {
@@ -23,8 +23,9 @@ class EditProfileController: UITableViewController {
     weak var delegate: EditProfileControllerDelegate?
     
     private lazy var headerView = EditProfileHeader(user: user)
+    private let footerView = EditProfileFooter()
     
-    /* 🔰 ImagePickerController 🔰 */
+    /* 🔰⭐️ ImagePickerController ⭐️🔰 */
     private let imagePicker = UIImagePickerController()
     private var selectedImage: UIImage? {
         didSet{ headerView.profileImageView.image = selectedImage }
@@ -46,7 +47,6 @@ class EditProfileController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureNavigationBar()
         configureTableView()
         
@@ -60,9 +60,9 @@ class EditProfileController: UITableViewController {
     }
     
     @objc func handleDone() {
-        // 收起鍵盤
+        /* 在按下「完成」按鈕時，收起鍵盤 */
         view.endEditing(true)
-        
+        /* 同時檢查2個 Bool，確認使用者的確有修改資料 */
         guard imageChanged || userInfoChanged else { return }
         
         updateUserData()
@@ -71,32 +71,34 @@ class EditProfileController: UITableViewController {
     // MARK: - API
     func updateUserData() {
         if imageChanged && !userInfoChanged {
-            print("===== ✅ DEBUG: Changed image and not data")
-            updateprofileImage()
+            print("===== ✅ DEBUG: Changed only user image")
+            updateProfileImage()
         }
         
         if userInfoChanged && !imageChanged {
             UserService.shared.saveUserData(user: user) { (err, ref) in
-                print("===== ✅ DEBUG: Changed data and not image")
-                self.delegate?.controller(self, wantsToUpdate: self.user)
+                print("===== ✅ DEBUG: Changed only user data")
+                self.delegate?.controller(self,
+                                          wantsToUpdate: self.user)
                 self.dismiss(animated: true, completion: nil)
             }
         }
         
         if userInfoChanged && imageChanged {
-            print("===== ✅ DEBUG: Changed image and data")
+            print("===== ✅ DEBUG: Changed both image and data")
             UserService.shared.saveUserData(user: user) { (err, ref) in
-                self.updateprofileImage()
+                self.updateProfileImage()
             }
         }
     }
     
-    func updateprofileImage() {
+    func updateProfileImage() {
         guard let image = selectedImage else { return }
         
         UserService.shared.updateProfileImage(image: image) { profileImageUrl in
             self.user.profileImageUrl = profileImageUrl
-            self.delegate?.controller(self, wantsToUpdate: self.user)
+            self.delegate?.controller(self,
+                                      wantsToUpdate: self.user)
         }
     }
     
@@ -110,16 +112,18 @@ class EditProfileController: UITableViewController {
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.tintColor = .white
         
-        // ⭐️ 設定 NavigationBar 標題
+        // ⭐️ 設定 NavigationBar 標題 ⭐️
         navigationItem.title = "Edit Profile"
         
         // ➡️ 設定 NavigationBar 左右側的按鈕
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
-                                                           target: self,
-                                                           action: #selector(handleCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
-                                                            target: self,
-                                                            action: #selector(handleDone))
+        navigationItem.leftBarButtonItem =
+            UIBarButtonItem(barButtonSystemItem: .cancel,
+                            target: self,
+                            action: #selector(handleCancel))
+        navigationItem.rightBarButtonItem =
+            UIBarButtonItem(barButtonSystemItem: .done,
+                            target: self,
+                            action: #selector(handleDone))
     }
     
     func configureTableView() {
@@ -131,7 +135,10 @@ class EditProfileController: UITableViewController {
         tableView.register(EditProfileCell.self,
                            forCellReuseIdentifier: reuseIdentifier)
         
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = footerView
+        footerView.frame = CGRect(x: 0, y: 0,
+                                  width: view.frame.width, height: 100)
+        footerView.delegate = self
     }
     
     func configureImagePicker() {
@@ -169,11 +176,9 @@ extension EditProfileController {
     override func tableView(_ tableView: UITableView,
                             heightForRowAt indexPath: IndexPath)
     -> CGFloat {
-        
         guard let option = EditProfileOptions(rawValue: indexPath.row) else { return 0 }
         // 針對 Bio 欄位，高設為 100
         return option == .bio ? 100 : 48
-        
     }
 }
 
@@ -215,5 +220,26 @@ extension EditProfileController: EditProfileCellDelegate {
         case .bio:
             user.bio = cell.bioTextView.text
         }
+    }
+}
+
+// MARK: - EditProfileFooterDelegate
+extension EditProfileController: EditProfileFooterDelegate {
+    func handleLogout() {
+        let alert = UIAlertController(title: nil,
+                                      message: "Are you sure to log out?",
+                                      preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Log Out",
+                                      style: .destructive,
+                                      handler: { _ in
+                                        print("======= 🔘 DEBUG: Handle log user out..")
+                                        self.dismiss(animated: true) {
+                                            self.delegate?.handleLogout()
+                                        }
+                                      }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
     }
 }

@@ -13,10 +13,11 @@ struct ActionSheetViewModel {
     var options: [ActionSheetOption] {
         var results = [ActionSheetOption]()
         
+        // 若是本人，增加一個 可以自刪推文 的選項
         if user.isCurrentUser {
             results.append(.delete)
         } else {
-            // 根據追蹤情形，顯示 不再追蹤|開始追蹤 的選項
+            // 根據追蹤狀況，顯示 不再追蹤|開始追蹤 的選項
             let followOption: ActionSheetOption =
                 user.isFollowed ? .unfollow(user) : .follow(user)
             results.append(followOption)
@@ -24,6 +25,7 @@ struct ActionSheetViewModel {
         results.append(.report)
         return results
     }
+    
     
     init(user: User) {
         self.user = user
@@ -36,6 +38,7 @@ enum ActionSheetOption {
     case report
     case delete
     
+    /// ActionSheet 行為表單 **選項的標題**
     var description: String {
         switch self {
         case .follow(let user): return "Follow @\(user.username)"

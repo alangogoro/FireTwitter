@@ -8,6 +8,7 @@
 import UIKit
 
 struct NotificationViewModel {
+    // MARK: - Properites
     private let notification: Notification
     private let type: NotificationType
     private let user: User
@@ -52,11 +53,11 @@ struct NotificationViewModel {
     var shouldHideFollowButton: Bool {
         return type != .follow
     }
-    
     var followButtonTitle: String {
         return user.isFollowed ? "Following" : "Follow"
     } 
     
+    // MARK: - Initializer
     init(notification: Notification) {
         self.notification = notification
         self.type = notification.type

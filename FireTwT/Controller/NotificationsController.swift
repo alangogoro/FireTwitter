@@ -19,10 +19,8 @@ class NotificationsController: UITableViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         fetchNotifications()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,19 +45,29 @@ class NotificationsController: UITableViewController {
             self.notifications = notifications
             // ➡️ 結束並藏起 RefreshControl
             self.refreshControl?.endRefreshing()
+            self.checkUserIsFollowing(notifications: notifications)
+        }
+    }
+    
+    func checkUserIsFollowing(notifications: [Notification]) {
+        guard !notifications.isEmpty else { return }
+        
+        notifications.forEach { notification in
+            // ➡️ 只檢查類型為「Follow」的通知
+            guard case .follow = notification.type else { return }
             
-            for (index, notification) in notifications.enumerated() {
-                // ➡️ 如果通知的類型為 .follow
-                if case .follow = notification.type {
-                    // ➡️ 查詢是否追蹤過 user，並反映在「Follow」按鈕上
-                    let user = notification.user
-                    UserService.shared.checkIfFollowing(uid: user.uid) { isFollowed in
-                        self.notifications[index].user.isFollowed = isFollowed
-                    }
+            let user = notification.user
+            UserService.shared.checkIfFollowing(uid: user.uid) { isFollowed in
+                /* ➡️ 找出通知陣列中 uid 相同的通知的陣列索引（Index）
+                 * 並利用該 index 賦值查詢到的追蹤 Bool 到陣列中對應的元素上 */
+                if let index =
+                    self.notifications.firstIndex(where: { $0.user.uid == notification.user.uid }) {
+                    self.notifications[index].user.isFollowed = isFollowed
                 }
             }
         }
     }
+    
     
     // MARK: - Helpers
     func configureUI() {

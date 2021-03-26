@@ -43,6 +43,13 @@ class FeedController: UICollectionViewController {
         fetchTweets()
     }
     
+    @objc func handleProfileImageTap() {
+        guard let user = user else { return }
+        //print("======= 🔘 DEBUG: Show user Profile..")
+        let controller = ProfileController(user: user)
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
     // MARK: - API
     func fetchTweets() {
         collectionView.refreshControl?.beginRefreshing()
@@ -111,6 +118,11 @@ class FeedController: UICollectionViewController {
         profileImageView.layer.cornerRadius = 32 / 2
         profileImageView.layer.masksToBounds = true
         
+        profileImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self,
+                                         action: #selector(handleProfileImageTap))
+        profileImageView.addGestureRecognizer(tap)
+        
         /* ⭐️ 設定 BarButtonItem 成大頭貼 ImageView ⭐️ */
         profileImageView.sd_setImage(with: user.profileImageUrl, completed: nil)
         navigationItem.leftBarButtonItem =
@@ -154,14 +166,12 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath)
     -> CGSize {
-        
         /* ➡️ 使 CollectionView Item 的大小（尺寸）
          * 能依照 Tweet 的內容作變化 */
         let viewModel = TweetViewModel(tweet: tweets[indexPath.row])
         let textHeight = viewModel.measuredSize(forWidth: view.frame.width).height
         
         return CGSize(width: view.frame.width, height: textHeight + 72)
-        
     }
 }
 
@@ -188,6 +198,7 @@ extension FeedController: TweetCellDelegate {
                                                config: .reply(tweet))
         let nav = UINavigationController(rootViewController: controller)
         nav.modalPresentationStyle = .overFullScreen
+        
         present(nav, animated: true)
     }
     
@@ -205,7 +216,9 @@ extension FeedController: TweetCellDelegate {
             // 判斷只有對推文 ❤️ 時，才會發送通知；Unlike 則不會有通知
             guard !tweet.didLike else { return }
             NotificationService.shared
-                .uploadNotification(type: .like, tweet: tweet)
+                .uploadNotification(toUser: tweet.user,
+                                    type: .like,
+                                    tweetID: tweet.tweetID)
         }
     }
 }

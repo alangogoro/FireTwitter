@@ -13,6 +13,7 @@ struct TweetViewModel {
     let tweet: Tweet
     let user: User
     
+    
     var profileImageUrl: URL? {
         return user.profileImageUrl
     }
@@ -36,17 +37,21 @@ struct TweetViewModel {
                                                     .foregroundColor: UIColor.lightGray])
         // ➡️ 因為是 NSMutable 字串所以可以 append
         title.append(stamp)
-        
         return title
-    }
-    
-    var likeButtonTintColor: UIColor {
-        return tweet.didLike ? .red : .lightGray
     }
     
     var likeButtonImage: UIImage {
         let imageName = tweet.didLike ? "like_filled" : "like"
         return UIImage(named: imageName)!
+    }
+    var likeButtonTintColor: UIColor {
+        return tweet.didLike ? .red : .lightGray
+    }
+    
+    var headerTimestamp: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a・MM/dd/yyyy"
+        return formatter.string(from: tweet.timestamp)
     }
     
     /// Tweet 的發文時間距今有多久
@@ -58,12 +63,6 @@ struct TweetViewModel {
         
         let now = Date()
         return formatter.string(from: tweet.timestamp, to: now) ?? "0m"
-    }
-    
-    var headerTimestamp: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a・MM/dd/yyyy"
-        return formatter.string(from: tweet.timestamp)
     }
     
     var retweetAttributedString: NSAttributedString? {
@@ -82,24 +81,13 @@ struct TweetViewModel {
     }
     
     
-    // MARK: - Lifecycle
+    // MARK: - Initializer
     init(tweet: Tweet) {
         self.tweet = tweet
         self.user = tweet.user
     }
     
-    fileprivate func attributedString(withValue value: Int, text: String) -> NSAttributedString {
-        let attributedTitle =
-            NSMutableAttributedString(string: "\(value)",
-                                      attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
-        attributedTitle
-            .append(NSAttributedString(string: " \(text)",
-                                       attributes: [.font: UIFont.systemFont(ofSize: 14),
-                                                    .foregroundColor: UIColor.lightGray]))
-        return attributedTitle
-    }
-    
-    // MARK: - Helpers
+    // MARK: - Methods
     /// 傳入螢幕寬度以計算出每條 Tweet Cell 所需要的尺寸
     func measuredSize(forWidth width: CGFloat) -> CGSize {
         let measureLabel = UILabel()
@@ -113,5 +101,17 @@ struct TweetViewModel {
         
         // ❗️回傳 View 元件在遵守了寬度約束之下最緊湊適配的 Size❗️
         return measureLabel.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+    }
+    
+    fileprivate func attributedString(withValue value: Int,
+                                      text: String) -> NSAttributedString {
+        let attributedTitle =
+            NSMutableAttributedString(string: "\(value)",
+                                      attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
+        attributedTitle
+            .append(NSAttributedString(string: " \(text)",
+                                       attributes: [.font: UIFont.systemFont(ofSize: 14),
+                                                    .foregroundColor: UIColor.lightGray]))
+        return attributedTitle
     }
 }

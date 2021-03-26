@@ -23,7 +23,6 @@ enum EditProfileOptions: Int, CaseIterable {
 
 
 struct EditProfileViewModel {
-    
     private let user: User
     let option: EditProfileOptions
     
@@ -51,9 +50,9 @@ struct EditProfileViewModel {
         return user.bio != nil
     }
     
+    
     init(user: User, option: EditProfileOptions) {
         self.user = user
         self.option = option
     }
-    
 }
