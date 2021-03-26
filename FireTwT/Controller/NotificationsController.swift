@@ -19,10 +19,8 @@ class NotificationsController: UITableViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         fetchNotifications()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

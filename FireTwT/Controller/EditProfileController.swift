@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 private let reuseIdentifier = "EditProfileCell"
 
 protocol EditProfileControllerDelegate: class {
@@ -26,7 +25,7 @@ class EditProfileController: UITableViewController {
     private lazy var headerView = EditProfileHeader(user: user)
     private let footerView = EditProfileFooter()
     
-    /* 🔰 ImagePickerController 🔰 */
+    /* 🔰⭐️ ImagePickerController ⭐️🔰 */
     private let imagePicker = UIImagePickerController()
     private var selectedImage: UIImage? {
         didSet{ headerView.profileImageView.image = selectedImage }
@@ -48,7 +47,6 @@ class EditProfileController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureNavigationBar()
         configureTableView()
         
@@ -62,9 +60,9 @@ class EditProfileController: UITableViewController {
     }
     
     @objc func handleDone() {
-        // 收起鍵盤
+        /* 在按下「完成」按鈕時，收起鍵盤 */
         view.endEditing(true)
-        
+        /* 同時檢查2個 Bool，確認使用者的確有修改資料 */
         guard imageChanged || userInfoChanged else { return }
         
         updateUserData()
@@ -73,32 +71,34 @@ class EditProfileController: UITableViewController {
     // MARK: - API
     func updateUserData() {
         if imageChanged && !userInfoChanged {
-            print("===== ✅ DEBUG: Changed image and not data")
-            updateprofileImage()
+            print("===== ✅ DEBUG: Changed only user image")
+            updateProfileImage()
         }
         
         if userInfoChanged && !imageChanged {
             UserService.shared.saveUserData(user: user) { (err, ref) in
-                print("===== ✅ DEBUG: Changed data and not image")
-                self.delegate?.controller(self, wantsToUpdate: self.user)
+                print("===== ✅ DEBUG: Changed only user data")
+                self.delegate?.controller(self,
+                                          wantsToUpdate: self.user)
                 self.dismiss(animated: true, completion: nil)
             }
         }
         
         if userInfoChanged && imageChanged {
-            print("===== ✅ DEBUG: Changed image and data")
+            print("===== ✅ DEBUG: Changed both image and data")
             UserService.shared.saveUserData(user: user) { (err, ref) in
-                self.updateprofileImage()
+                self.updateProfileImage()
             }
         }
     }
     
-    func updateprofileImage() {
+    func updateProfileImage() {
         guard let image = selectedImage else { return }
         
         UserService.shared.updateProfileImage(image: image) { profileImageUrl in
             self.user.profileImageUrl = profileImageUrl
-            self.delegate?.controller(self, wantsToUpdate: self.user)
+            self.delegate?.controller(self,
+                                      wantsToUpdate: self.user)
         }
     }
     
@@ -112,16 +112,18 @@ class EditProfileController: UITableViewController {
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.tintColor = .white
         
-        // ⭐️ 設定 NavigationBar 標題
+        // ⭐️ 設定 NavigationBar 標題 ⭐️
         navigationItem.title = "Edit Profile"
         
         // ➡️ 設定 NavigationBar 左右側的按鈕
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
-                                                           target: self,
-                                                           action: #selector(handleCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
-                                                            target: self,
-                                                            action: #selector(handleDone))
+        navigationItem.leftBarButtonItem =
+            UIBarButtonItem(barButtonSystemItem: .cancel,
+                            target: self,
+                            action: #selector(handleCancel))
+        navigationItem.rightBarButtonItem =
+            UIBarButtonItem(barButtonSystemItem: .done,
+                            target: self,
+                            action: #selector(handleDone))
     }
     
     func configureTableView() {
@@ -174,11 +176,9 @@ extension EditProfileController {
     override func tableView(_ tableView: UITableView,
                             heightForRowAt indexPath: IndexPath)
     -> CGFloat {
-        
         guard let option = EditProfileOptions(rawValue: indexPath.row) else { return 0 }
         // 針對 Bio 欄位，高設為 100
         return option == .bio ? 100 : 48
-        
     }
 }
 

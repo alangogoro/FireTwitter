@@ -18,7 +18,6 @@ struct NotificationService {
         var values: [String: Any] = ["timestamp": Int(NSDate().timeIntervalSince1970),
                                      "uid": uid,
                                      "type": type.rawValue]
-        
         // 若通知內含有推文資料
         if let tweetID = tweetID {
             values["tweetID"] = tweetID
@@ -37,13 +36,14 @@ struct NotificationService {
         DB_REF.child("notifications")
             .child(uid).observeSingleEvent(of: .value) { snapshot in
             if !snapshot.exists() {
-                completion([Notification]())
+                completion([Notification]()) // 空的通知陣列
             } else {
                 /* ➡️ 確認使用者有通知資料後，利用 Uid 查詢所有通知 */
                 self.getNotifications(byUid: uid, completion: completion)
             }
         }
     }
+    
     fileprivate func getNotifications(byUid uid: String,
                                       completion: @escaping ([Notification]) -> ()) {
         var notifications = [Notification]()

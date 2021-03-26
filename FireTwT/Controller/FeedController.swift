@@ -166,14 +166,12 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath)
     -> CGSize {
-        
         /* ➡️ 使 CollectionView Item 的大小（尺寸）
          * 能依照 Tweet 的內容作變化 */
         let viewModel = TweetViewModel(tweet: tweets[indexPath.row])
         let textHeight = viewModel.measuredSize(forWidth: view.frame.width).height
         
         return CGSize(width: view.frame.width, height: textHeight + 72)
-        
     }
 }
 
@@ -200,6 +198,7 @@ extension FeedController: TweetCellDelegate {
                                                config: .reply(tweet))
         let nav = UINavigationController(rootViewController: controller)
         nav.modalPresentationStyle = .overFullScreen
+        
         present(nav, animated: true)
     }
     

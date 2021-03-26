@@ -35,6 +35,7 @@ class SearchController: UITableViewController {
             !searchController.searchBar.text!.isEmpty
     }
     
+    
     // MARK: - Lifecycle
     init(config: SearchControllerConfiguration) {
         self.config = config
@@ -47,11 +48,9 @@ class SearchController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         configureSearchController()
         fetchUsers()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,6 +59,7 @@ class SearchController: UITableViewController {
         navigationController?.navigationBar.barStyle = .default
         navigationController?.navigationBar.isHidden = false
     }
+    
     
     // MARK: - API
     func fetchUsers() {

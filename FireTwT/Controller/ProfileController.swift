@@ -16,8 +16,8 @@ class ProfileController: UICollectionViewController {
     // MARK: - Properties
     private var user: User
        
-    /* ⭐️ 藉由 delegate 取得被使用者選取的 Filter(頁籤) ⭐️
-     * 再切換 TableView 的 dataSource */
+    /* ⭐️ 作為 delegate 取得使用者選取的 Filter(頁籤) ⭐️
+     * 再切換 tableView 的 dataSource */
     private var selectedFilter: ProfileFilterOptions = .tweets {
         didSet { collectionView.reloadData() }
     }
@@ -48,9 +48,11 @@ class ProfileController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+        
         fetchTweets()
         fetchLikedTweets()
         fetchReplies()
+        
         checkIfFollowing()
         fetchUserStates()
     }
@@ -66,25 +68,24 @@ class ProfileController: UICollectionViewController {
     func fetchTweets() {
         TweetService.shared.fetchTweets(forUser: user) { tweets in
             self.tweets = tweets
-            //print("===== ✅ DEBUG: Completed fetch tweets..")
         }
     }
     
     func fetchLikedTweets() {
-        TweetService.shared.fetchLikedTweet(forUser: user) { tweets in
-            self.likedTweets = tweets
+        TweetService.shared.fetchLikedTweet(forUser: user) { likedTweets in
+            self.likedTweets = likedTweets
         }
     }
     
     func fetchReplies() {
-        TweetService.shared.fetchReplies(forUser: user) { tweets in
-            self.replies = tweets
+        TweetService.shared.fetchReplies(forUser: user) { replies in
+            self.replies = replies
         }
     }
 
     func checkIfFollowing() {
-        UserService.shared.checkIfFollowing(uid: user.uid) { isFollowing in
-            self.user.isFollowed = isFollowing
+        UserService.shared.checkIfFollowing(uid: user.uid) { isFollowed in
+            self.user.isFollowed = isFollowed
             self.collectionView.reloadData()
         }
     }
@@ -100,7 +101,7 @@ class ProfileController: UICollectionViewController {
     func configureCollectionView() {
         collectionView.backgroundColor = .white
         
-        /* ❗️⭐️ 強制 CollectionView 不會自動調整位置避開導覽列 ⭐️❗️ */
+        /* ❗️⭐️ 設定 CollectionView 不再自動調整位置避開導覽列 ⭐️❗️ */
         collectionView.contentInsetAdjustmentBehavior = .never
         
         /* ⭐️🔰 註冊 CollectionView 的 Header 🔰⭐️ */
@@ -110,7 +111,7 @@ class ProfileController: UICollectionViewController {
         collectionView.register(TweetCell.self,
                                 forCellWithReuseIdentifier: reuseIdentifier)
         
-        /* ⭐️ 先取得 TabBar 的高，再設定 CollectionView 的下緣內距 ⭐️ */
+        /* ⭐️ 先取得 TabBar 的高，再去設置 CollectionView 的下緣外距 ⭐️ */
         guard let tabHeight = tabBarController?.tabBar
                 .frame.height else { return }
         collectionView.contentInset.bottom = tabHeight
@@ -193,6 +194,11 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - ProfileHeaderDelegate
 extension ProfileController: ProfileHeaderDelegate {
+    // 得知使用者點選的頁籤並重整頁面佈局
+    func didSelectFilter(filter: ProfileFilterOptions) {
+        self.selectedFilter = filter
+    }
+    
     func handleDismissal() {
         navigationController?.popViewController(animated: true)
     }
@@ -221,15 +227,11 @@ extension ProfileController: ProfileHeaderDelegate {
                 self.user.isFollowed = true
                 self.collectionView.reloadData()
                 
-                // 傳送通知
+                // 傳送開始追蹤的通知
                 NotificationService.shared.uploadNotification(toUser: self.user,
                                                               type: .follow)
             }
         }
-    }
-    // 得知使用者點選的頁籤並重整頁面佈局
-    func didSelectFilter(filter: ProfileFilterOptions) {
-        self.selectedFilter = filter
     }
 }
 
@@ -237,7 +239,9 @@ extension ProfileController: ProfileHeaderDelegate {
 extension ProfileController: EditProfileControllerDelegate {
     func controller(_ controller: EditProfileController,
                     wantsToUpdate user: User) {
+        // 先關閉 EditProfile 的頁面
         controller.dismiss(animated: true, completion: nil)
+        
         self.user = user
         self.collectionView.reloadData()
     }

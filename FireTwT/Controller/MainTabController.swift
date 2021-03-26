@@ -17,8 +17,9 @@ class MainTabController: UITabBarController {
     
     // MARK: - Properties
     var user: User? {
-        /* ⭐️ 把 TabController 得到的 user 指派給 FeedController ⭐️ */
         didSet {
+            /* ⭐️ 將已知的 user 值傳給
+             * 第一個 Tab 上 NavigationController 的第一頁 FoodController ⭐️ */
             guard let nav = viewControllers?[0] as? UINavigationController else { return }
             guard let feed = nav.viewControllers.first as? FeedController else { return }
             feed.user = user
@@ -82,7 +83,7 @@ class MainTabController: UITabBarController {
         case .tweet:
             controller = SearchController(config: .userSearch)
         case .message:
-            /* ➡️ 因為有自定義 UploadTweetController 的建構式
+            /* ➡️ 因為有自定義 UploadTweetController 的 init 建構式
              * 在建立該頁面時需要傳入參數 user */
             guard let user = user else { return }
             controller = UploadTweetController(user: user, config: .tweet)
@@ -145,7 +146,6 @@ extension MainTabController: UITabBarControllerDelegate {
         
         let imageName = index == 3 ? "mail" : "new_tweet"
         actionButton.setImage(UIImage(named: imageName), for: .normal)
-        
         buttonConfig = index == 3 ? .message : .tweet
     }
 }
